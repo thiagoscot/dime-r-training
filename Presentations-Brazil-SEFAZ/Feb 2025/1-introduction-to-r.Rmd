@@ -1,6 +1,6 @@
 --- 
 title: "Sessão 1 - Introdução ao R"
-subtitle: "Treinamento em R- SEFAZ RGS -WB DIME"
+subtitle: "Treinamento em R- SEFAZ RS - WB DIME"
 author: "Thiago Scot"
 date: "The World Bank | Fevereiro 2025"
 output:
@@ -20,6 +20,8 @@ output:
 library(knitr)
 library(xaringanExtra)
 library(here)
+library(data.table)
+
 here::i_am("1-introduction-to-r.Rmd")
 options(htmltools.dir.version = FALSE)
 opts_chunk$set(
@@ -89,7 +91,6 @@ name: intro
 
 - É necessário um computador com R e RStudio instalados para completar os exercícios
 
-- Conexão com a internet é necessária para baixar os materiais do treinamento
 
 ---
 
@@ -101,7 +102,7 @@ Ao final do treinamento, você saberá:
 
 - Como abordar o trabalho com dados por meio da programação estatística utilizando R e RStudio
 
-- Como aplicar manipulação de dados e criar resultados com estatísticas descritivas e visualização de dados, desenvolvendo e executando código R reproduzível
+- Como aplicar manipulação de dados e criar resultados com estatísticas descritivas e visualização de dados, desenvolvendo e executando código R **reproduzível**
 
 ---
 
@@ -118,9 +119,9 @@ name: data-work
 
 Para o contexto deste treinamento, chamaremos de trabalho com dados tudo aquilo que:
 
-1. Começa com uma entrada de dados
+1. Começa com uma entrada (*input*) de dados
 2. Realiza algum processo com os dados
-3. Produz uma saída com o resultado
+3. Produz resultados (*output*)
 
 ```{r echo = FALSE, out.width="90%"}
 knitr::include_graphics("img/session1/data-work.png")
@@ -134,7 +135,7 @@ knitr::include_graphics("img/session1/data-work.png")
 
 - No contexto do trabalho com dados, esse "algo" é análise estatística ou operações matemáticas
 
-- Portanto, programação estatística consiste em produzir instruções para que nossos computadores realizem análise estatística sobre os dados
+- Portanto, programação estatística consiste em **produzir instruções para que nossos computadores realizem análise estatística sobre os dados**
 
 ```{r echo = FALSE, out.width="70%"}
 knitr::include_graphics("img/session1/data-work-with-instructions.png")
@@ -158,7 +159,7 @@ knitr::include_graphics("img/session1/data-work-and-cooking.png")
 
 .pull-left[
 - A programação estatística pode ser implementada através de diversos softwares. Outras opções são Stata e Python
-- Recomendamos o uso do R por estes motivos:
+- Algumas razões pra usar R:
   + O R é gratuito
   + O R foi desenvolvido especificamente para programação estatística
   + Existe uma grande comunidade mundial de usuários de R. Isso significa que você pode facilmente buscar ajuda ou exemplos de código na internet
@@ -357,7 +358,7 @@ knitr::include_graphics("img/session1/data-work-script.png")
   + Uma palavra pode ser um objeto
   + Até mesmo um arquivo de dados inteiro pode ser um objeto
 
-- Criamos objetos no R com o operador de seta (`<-`)
+- Criamos objetos no R com o operador de seta (`<-`) ou com operador de igual (`=`)
 
 - No exercício 2, criamos objetos cada vez que usamos `<-`
 
@@ -406,11 +407,10 @@ name: data-in-r
 
 ## Exercício 3: Carregando dados no R
 
- 1.- Vá para esta página: https://osf.io/2apht e baixe o arquivo `small_business_2019_br.csv` <span style="color:red"> WE NEED TO UPDATE THIS PATH.</span>
+ 1.- Verifique que você tem acesso a estes arquivos:
  
-```{r echo = FALSE, out.width="60%"}
-knitr::include_graphics("img/session1/osf-screenshot.png")
-```
+ - base_nfe.csv
+ - base_emissor.csv
 
 ---
 
@@ -418,7 +418,7 @@ knitr::include_graphics("img/session1/osf-screenshot.png")
 
 ## Exercício 3: Carregando dados no R
 
- 2.No RStudio, vá em `File` > `Import Dataset` > `From Text (base)` e selecione o arquivo  `small_business_2019_br.csv`
+ 2.No RStudio, vá em `File` > `Import Dataset` > `From Text (base)` e selecione o arquivo  `base_nfe.csv`
 
   + Se você não souber onde está o arquivo, verifique na sua pasta `Downloads`
 
@@ -428,11 +428,6 @@ knitr::include_graphics("img/session1/import_data1.png")
 ```
 ]
 
-.pull-right[
-```{r echo = FALSE, out.width="70%"}
-knitr::include_graphics("img/session1/downloads-1.png")
-```
-]
 
 ---
 
@@ -453,8 +448,8 @@ knitr::include_graphics("img/session1/import3-1.png")
 # Dados no R
 
 - Se você fez isso corretamente, perceberá que um visualizador dos dados agora aparece no RStudio
-- Você pode clicar no `x` o lado de `small_business_2019_br` para voltar ao script 
-- Para abrir o visualizador novamente, use o código: `View(small_business_2019_br)` (note o "V" maiúsculo)
+- Você pode clicar no `x` o lado de `base_nfe` para voltar ao script 
+- Para abrir o visualizador novamente, use o código: `View(base_nfe)` (note o "V" maiúsculo)
 
 ```{r echo = FALSE, out.width="70%"}
 knitr::include_graphics("img/session1/data-viewer-br.png")
@@ -464,7 +459,7 @@ knitr::include_graphics("img/session1/data-viewer-br.png")
 
 # Dados no R
 
-- Além disso, agora você verá um objeto chamado `small_business_2019_br` no seu painel de ambiente
+- Além disso, agora você verá um objeto chamado `base_nfe` no seu painel de ambiente
 
 ```{r echo = FALSE, out.width="70%"}
 knitr::include_graphics("img/session1/environment2.png")
@@ -474,9 +469,9 @@ knitr::include_graphics("img/session1/environment2.png")
 
 # Dados no R
 
-- Lembra que mencionamos os objetos antes? Para o R, `small_business_2019_br` é um objeto assim como `x1`, `x2`, ou `x3`
+- Lembra que mencionamos os objetos antes? Para o R, `base_nfe` é um objeto assim como `x1`, `x2`, ou `x3`
 
-- A diferença é que `small_business_2019_br` não é um único número como `x1`, mas uma coleção de valores numéricos semelhantes a uma planilha do Excel. No R, esse tipo de objeto é chamado **dataframes**
+- A diferença é que `base_nfe` não é um único número como `x1`, mas uma coleção de valores numéricos semelhantes a uma planilha do Excel. No R, esse tipo de objeto é chamado **dataframes**
 
 - A partir de agora, vamos nos referir aos dados carregados no R como **dataframes**
 
@@ -488,7 +483,7 @@ knitr::include_graphics("img/session1/environment2.png")
 
 # Dados no R
 
-- Como os dataframes também são objetos, podemos nos referir a eles pelos seus nomes (exm: `small_business_2019_br`)
+- Como os dataframes também são objetos, podemos nos referir a eles pelos seus nomes (exm: `base_nfe`)
 
 - Veremos um exemplo disso no próximo exercício
 
@@ -496,15 +491,22 @@ knitr::include_graphics("img/session1/environment2.png")
 
 # Dados no R
 
-## A note about this dataframe
+## Sobre essa base de dados
 
-Compreender os dados que você usa é muito importante. Para este treinamento, `small_business_2019_br` é um dataframe de exemplo com dados de receita de negócios para 2019
+Compreender os dados que você usa é muito importante. Para este treinamento, `base_nfe` é um dataframe de exemplo com dados de items de Notas Fiscais Eletronicas para Out-Dez 2024:
 
-- `modified_id` é o identificador do negócio
-- `region` é a região onde o negócio está localizado
-- `income` é a receita que o negócio reportou em 2019
+<details>
+<summary><b>Colunas ou Variáveis</b></summary>
 
-```{r echo = FALSE, out.width="50%"}
+- `nfuid_anon` é o identificador da NFe
+- `dt_emissao` e `mes_emissao` indicam datas de emissão
+- `emitcnpj9_anon` é identificador anonimizado de CNPJ 8 digitos
+- `xprod` é descrição do item
+- `vprod` e `vicms` são valores de venda e ICMS
+- `cfop` é Código Fiscal de Operações e Prestações
+
+</details>
+```{r echo = FALSE, out.width="80%"}
 knitr::include_graphics("img/session1/data-viewer-br.png")
 ```
 
@@ -514,13 +516,12 @@ knitr::include_graphics("img/session1/data-viewer-br.png")
 
 ## Exercício 4: Subconjunto de dados
 
-1. Use o seguinte código para criar um subconjunto de `small_business_2019_br` mantendo apenas as observações na região chamada:  "Pelotas": `df_pelotas <- subset(small_business_2019_br, region == "Pelotas")`
+1. Use o seguinte código para criar um subconjunto de `base_nfe` mantendo apenas as observações de NFe emitidas em Outubro (mês 10): `base_outubro = subset(base_nfe, mes_emissao == 10)`
 
-  + Note que estamos usando o operador de seta (`<-`) para armazenar o resultado
+  + Note que estamos usando o operador de igual (`=`) para armazenar o resultado
   + Note que há **dois sinais de igual** na condição, não um
-  + Também note que você precisa escrever `"Pelotas"` entre aspas e com a letra `P`, pois é assim que está nos dados
   
-2. Use `View(df_pelotas)` para visualizar o dataframe novamente e ver como ele mudou (note a letra maiúscula "V")
+2. Use `View(base_outubro)` para visualizar o dataframe novamente e ver como ele mudou (note a letra maiúscula "V")
 
 ---
 
@@ -535,15 +536,15 @@ knitr::include_graphics("img/session1/data-viewer2-br.png")
 # Dados no R
 ## Armazenando resultados no R
 
-Há uma diferença importante entre usar  `<-` e não usá-lo
+Há uma diferença importante entre usar  `<-` ou `=` e não usá-los
 
--Não usar `<-` **simplesmente exibe o resultado no console**. O dataframe de entrada permanecerá inalterado e o resultado **não será armazenado**
+-Não usar `=` **simplesmente exibe o resultado no console**. O dataframe de entrada permanecerá inalterado e o resultado **não será armazenado**
 
 ```{r eval=FALSE}
-subset(small_business_2019_br, region == "Pelotas")
+subset(base_nfe, mes_emissao == 10)
 ```
 
-```{r echo = FALSE, out.width="50%"}
+```{r echo = FALSE, out.width="70%"}
 knitr::include_graphics("img/session1/console-subset-br.png")
 ```
 
@@ -553,14 +554,14 @@ knitr::include_graphics("img/session1/console-subset-br.png")
 
 ## Armazenando resultados no R
 
-- Using `<-` informa ao R que queremos armazenar o resultado em **um novo objeto**, que é o objeto à esquerda da seta. Dessa vez, o resultado não será impresso no console, mas o novo dataframe aparecerá no painel de ambiente
+- Usar `=` informa ao R que queremos armazenar o resultado em **um novo objeto**, que é o objeto à esquerda da seta. Dessa vez, o resultado não será impresso no console, mas o novo dataframe aparecerá no painel de ambiente
 
 ```{r echo=FALSE}
-small_business_2019_br <- read.csv(here("data", "small_business_2019_br.csv"))
+base_nfe <- fread('/Users/tscot/Downloads/Treinamento_SEFAZ/base_nfe.csv')
 ```
 
 ```{r}
-df_pelotas <- subset(small_business_2019_br, region == "Pelotas")
+base_outubro = subset(base_nfe, mes_emissao == 10)
 ```
 
 ```{r echo = FALSE, out.width="60%"}
@@ -575,9 +576,7 @@ knitr::include_graphics("img/session1/environment3-br.png")
 
 - Lembre-se sempre de que dataframes são apenas objetos no R. O R diferencia a qual dataframe o código se refere pelo nome do dataframe.
 
-```{r echo = FALSE, out.width="95%"}
-knitr::include_graphics("img/session1/multiple-dataframes-br.png")
-```
+
 
 ---
 
@@ -611,8 +610,8 @@ x3 <- x1 + x2
 class(x1)
 ```
 
-```{r}
-class(df_pelotas)
+```{r, eval=FALSE}
+class(base_outubro)
 ```
 ---
 
@@ -622,9 +621,9 @@ Até agora, trabalhamos com duas classes de objetos:
 
 - **Numérico:** valores numéricos únicos que podemos usar em operações matemáticas. Os objetos `x1`, `x2`, and `x3` são numéricos. Eles são semelhantes aos valores que você armazenaria em uma célula única do Excel
 
-- **Dataframe:** uma coleção de valores organizados em linhas e colunas. `small_business_2019_br` and `df_pelotas` são dataframes. Eles são semelhantes a uma planilha do Excel.
+- **Dataframe:** uma coleção de valores organizados em linhas e colunas. `base_nfe` and `base_outubro` são dataframes. Eles são semelhantes a uma planilha do Excel.
 
-No próximo exercício, aprenderemos sobre outro tipo de objeto.
+No próximo exercício, aprenderemos sobre outro tipo de objeto. (para consulta própria)
 
 ---
 
@@ -728,8 +727,8 @@ name: functions-in-r
 - Tudo o que tem um nome seguido de parênteses é uma função no R
 
 
-```{r echo = FALSE, out.width="95%"}
-knitr::include_graphics("img/session1/function-br.png")
+```{r eval = FALSE, out.width="95%"}
+subset(base_nfe, mes_emissao == 10)
 ```
 
 ---
@@ -753,7 +752,7 @@ knitr::include_graphics("img/session1/function-syntax-br.png")
 
 # Funções no R
 
-- O resultado de uma função pode sempre ser armazenado em um objeto utilizando o operador de seta (`<-`)
+- O resultado de uma função pode sempre ser armazenado em um objeto utilizando o operador de seta (`<-`) ou igual (`=`)
 
 ```{r echo = FALSE, out.width="95%"}
 knitr::include_graphics("img/session1/function-stored-br.png")
@@ -767,7 +766,7 @@ knitr::include_graphics("img/session1/function-stored-br.png")
 
 ## Exercício 6: Usando a função `summary()`
 
-1. Calcule as estatísticas descritivas das variáveis de  `small_business_2019_br` e armazene o resultado com `summary_table <- summary(small_business_2019_br)`
+1. Calcule as estatísticas descritivas das variáveis de  `base_nfe` e armazene o resultado com `summary_table <- summary(base_nfe)`
 
 2. Imprima o resultado armazenado com `print(summary_table)`
 
@@ -775,7 +774,7 @@ knitr::include_graphics("img/session1/function-stored-br.png")
 
 # Funções no R
 
-Observe que este código está tanto criando um novo objeto (com `summary_table <- summary(small_business_2019_br)`) quanto imprimindo o resultado no console (com `print(small_business_2019_br)`)
+Observe que este código está tanto criando um novo objeto (com `summary_table <- summary(base_nfe)`) quanto imprimindo o resultado no console (com `print(summary_table)`)
 
 ```{r echo = FALSE, out.width="75%"}
 knitr::include_graphics("img/session1/summary-result.png")
@@ -830,7 +829,7 @@ knitr::include_graphics("img/session1/code-comments.png")
 - Selecione um local para o seu arquivo e lembre-se de onde está salvando.
 
 ```{r echo = FALSE, out.width="65%"}
-knitr::include_graphics("img/session1/save.png")
+knitr::include_graphics("img/session1/code-comments.png")
 ```
 
 ---
@@ -869,67 +868,3 @@ class: inverse, center, middle
 # Obrigado! // Thanks! // ¡Gracias! 
 
 <html><div style='float:left'></div><hr color='#D38C28' size=1px width=1100px></html>
-
----
-
-class: inverse, center, middle
-name: appendix
-
-# Appendix 
-
-<html><div style='float:left'></div><hr color='#D38C28' size=1px width=1100px></html>
-
----
-
-# Appendix 
-
-## Tipos de objetos: cadeias de caracteres
-
-- As cadeias de caracteres são coleções de caracteres alfanuméricos, geralmente representando palavras ou textos, ou apenas caracteres em geral.
-
-```{r}
-s1 <- "Oi!"
-print(s1)
-```
-
-- As cadeias de caracteres **sempre ficam entre aspas** (`" "`)
-
-- Elas são geralmente chamadas apenas de **strings**
-
----
-
-# Appendix 
-## Exercise: create and operate character strings
-
-1. Create a character string object with the words `"Georgia has great"` and name it `words1`
-
-2. Create a second string with the words `"wine"` and name it `words2` 
-
-  + Don't forget to use `<-` to create the string objects
-  + Remember to include the quotes: `" "`
-
-3. Use the following code to concatenate `words1` and `words2`, save the result in `words_result`, and print it:
-
-```{r eval=FALSE}
-words_result <- paste(words1, words2)
-print(words_result)
-```
-
----
-
-# Appendix 
-## Object types: character strings
-
-```{r echo = FALSE, out.width="45%"}
-knitr::include_graphics("img/session1/ex6.png")
-```
-
----
-
-# Appendix 
-
-## Object types: character strings
-
-```{r echo = FALSE, out.width="60%"}
-knitr::include_graphics("img/session1/ex6-environment.png")
-```

@@ -5,9 +5,14 @@
     <meta charset="utf-8" />
     <meta name="author" content="Thiago Scot" />
     <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/panelset/panelset.css" rel="stylesheet" />
+    <script src="libs/panelset/panelset.js"></script>
+    <script src="libs/xaringanExtra-webcam/webcam.js"></script>
+    <script id="xaringanExtra-webcam-options" type="application/json">{"width":"200","height":"200","margin":"1em"}</script>
     <script src="libs/clipboard/clipboard.min.js"></script>
     <link href="libs/xaringanExtra-clipboard/xaringanExtra-clipboard.css" rel="stylesheet" />
     <script src="libs/xaringanExtra-clipboard/xaringanExtra-clipboard.js"></script>
+    <script>window.xaringanExtraClipboard(null, {"button":"Copy Code","success":"Copied!","error":"Press Ctrl+C to Copy"})</script>
     <script>window.xaringanExtraClipboard(null, {"button":"Copy Code","success":"<i class=\"fa fa-check\" style=\"color: #90BE6D\"><\/i>","error":"<i class=\"fa fa-times-circle\" style=\"color: #F94144\"><\/i>"})</script>
     <link href="libs/font-awesome/css/all.min.css" rel="stylesheet" />
     <link href="libs/font-awesome/css/v4-shims.min.css" rel="stylesheet" />
@@ -23,7 +28,7 @@ class: center, middle, inverse, title-slide
 # Sessão 1 - Introdução ao R
 ]
 .subtitle[
-## Treinamento em R- SEFAZ RGS -WB DIME
+## Treinamento em R- SEFAZ RS - WB DIME
 ]
 .author[
 ### Thiago Scot
@@ -79,7 +84,6 @@ name: intro
 
 - É necessário um computador com R e RStudio instalados para completar os exercícios
 
-- Conexão com a internet é necessária para baixar os materiais do treinamento
 
 ---
 
@@ -91,7 +95,7 @@ Ao final do treinamento, você saberá:
 
 - Como abordar o trabalho com dados por meio da programação estatística utilizando R e RStudio
 
-- Como aplicar manipulação de dados e criar resultados com estatísticas descritivas e visualização de dados, desenvolvendo e executando código R reproduzível
+- Como aplicar manipulação de dados e criar resultados com estatísticas descritivas e visualização de dados, desenvolvendo e executando código R **reproduzível**
 
 ---
 
@@ -108,9 +112,9 @@ name: data-work
 
 Para o contexto deste treinamento, chamaremos de trabalho com dados tudo aquilo que:
 
-1. Começa com uma entrada de dados
+1. Começa com uma entrada (*input*) de dados
 2. Realiza algum processo com os dados
-3. Produz uma saída com o resultado
+3. Produz resultados (*output*)
 
 &lt;img src="img/session1/data-work.png" width="90%" style="display: block; margin: auto;" /&gt;
 
@@ -122,7 +126,7 @@ Para o contexto deste treinamento, chamaremos de trabalho com dados tudo aquilo 
 
 - No contexto do trabalho com dados, esse "algo" é análise estatística ou operações matemáticas
 
-- Portanto, programação estatística consiste em produzir instruções para que nossos computadores realizem análise estatística sobre os dados
+- Portanto, programação estatística consiste em **produzir instruções para que nossos computadores realizem análise estatística sobre os dados**
 
 &lt;img src="img/session1/data-work-with-instructions.png" width="70%" style="display: block; margin: auto;" /&gt;
 
@@ -142,7 +146,7 @@ Para o contexto deste treinamento, chamaremos de trabalho com dados tudo aquilo 
 
 .pull-left[
 - A programação estatística pode ser implementada através de diversos softwares. Outras opções são Stata e Python
-- Recomendamos o uso do R por estes motivos:
+- Algumas razões pra usar R:
   + O R é gratuito
   + O R foi desenvolvido especificamente para programação estatística
   + Existe uma grande comunidade mundial de usuários de R. Isso significa que você pode facilmente buscar ajuda ou exemplos de código na internet
@@ -240,7 +244,7 @@ name: writing-r-code
 1- Escreva ou copie o seguinte texto na seção de script do RStudio:
 
 
-```r
+``` r
 x1 &lt;- 100
 x2 &lt;- 50
 x3 &lt;- x1 + x2
@@ -320,7 +324,7 @@ print(x3)
   + Uma palavra pode ser um objeto
   + Até mesmo um arquivo de dados inteiro pode ser um objeto
 
-- Criamos objetos no R com o operador de seta (`&lt;-`)
+- Criamos objetos no R com o operador de seta (`&lt;-`) ou com operador de igual (`=`)
 
 - No exercício 2, criamos objetos cada vez que usamos `&lt;-`
 
@@ -329,7 +333,7 @@ print(x3)
 
 
 
-```r
+``` r
 print(x3 + 8)
 ```
 
@@ -370,9 +374,10 @@ name: data-in-r
 
 ## Exercício 3: Carregando dados no R
 
- 1.- Vá para esta página: https://osf.io/2apht e baixe o arquivo `small_business_2019_br.csv` &lt;span style="color:red"&gt; WE NEED TO UPDATE THIS PATH.&lt;/span&gt;
+ 1.- Verifique que você tem acesso a estes arquivos:
  
-&lt;img src="img/session1/osf-screenshot.png" width="60%" style="display: block; margin: auto;" /&gt;
+ - base_nfe.csv
+ - base_emissor.csv
 
 ---
 
@@ -380,7 +385,7 @@ name: data-in-r
 
 ## Exercício 3: Carregando dados no R
 
- 2.No RStudio, vá em `File` &gt; `Import Dataset` &gt; `From Text (base)` e selecione o arquivo  `small_business_2019_br.csv`
+ 2.No RStudio, vá em `File` &gt; `Import Dataset` &gt; `From Text (base)` e selecione o arquivo  `base_nfe.csv`
 
   + Se você não souber onde está o arquivo, verifique na sua pasta `Downloads`
 
@@ -388,9 +393,6 @@ name: data-in-r
 &lt;img src="img/session1/import_data1.png" width="70%" style="display: block; margin: auto;" /&gt;
 ]
 
-.pull-right[
-&lt;img src="img/session1/downloads-1.png" width="70%" style="display: block; margin: auto;" /&gt;
-]
 
 ---
 
@@ -409,8 +411,8 @@ name: data-in-r
 # Dados no R
 
 - Se você fez isso corretamente, perceberá que um visualizador dos dados agora aparece no RStudio
-- Você pode clicar no `x` o lado de `small_business_2019_br` para voltar ao script 
-- Para abrir o visualizador novamente, use o código: `View(small_business_2019_br)` (note o "V" maiúsculo)
+- Você pode clicar no `x` o lado de `base_nfe` para voltar ao script 
+- Para abrir o visualizador novamente, use o código: `View(base_nfe)` (note o "V" maiúsculo)
 
 &lt;img src="img/session1/data-viewer-br.png" width="70%" style="display: block; margin: auto;" /&gt;
 
@@ -418,7 +420,7 @@ name: data-in-r
 
 # Dados no R
 
-- Além disso, agora você verá um objeto chamado `small_business_2019_br` no seu painel de ambiente
+- Além disso, agora você verá um objeto chamado `base_nfe` no seu painel de ambiente
 
 &lt;img src="img/session1/environment2.png" width="70%" style="display: block; margin: auto;" /&gt;
 
@@ -426,9 +428,9 @@ name: data-in-r
 
 # Dados no R
 
-- Lembra que mencionamos os objetos antes? Para o R, `small_business_2019_br` é um objeto assim como `x1`, `x2`, ou `x3`
+- Lembra que mencionamos os objetos antes? Para o R, `base_nfe` é um objeto assim como `x1`, `x2`, ou `x3`
 
-- A diferença é que `small_business_2019_br` não é um único número como `x1`, mas uma coleção de valores numéricos semelhantes a uma planilha do Excel. No R, esse tipo de objeto é chamado **dataframes**
+- A diferença é que `base_nfe` não é um único número como `x1`, mas uma coleção de valores numéricos semelhantes a uma planilha do Excel. No R, esse tipo de objeto é chamado **dataframes**
 
 - A partir de agora, vamos nos referir aos dados carregados no R como **dataframes**
 
@@ -438,7 +440,7 @@ name: data-in-r
 
 # Dados no R
 
-- Como os dataframes também são objetos, podemos nos referir a eles pelos seus nomes (exm: `small_business_2019_br`)
+- Como os dataframes também são objetos, podemos nos referir a eles pelos seus nomes (exm: `base_nfe`)
 
 - Veremos um exemplo disso no próximo exercício
 
@@ -446,15 +448,22 @@ name: data-in-r
 
 # Dados no R
 
-## A note about this dataframe
+## Sobre essa base de dados
 
-Compreender os dados que você usa é muito importante. Para este treinamento, `small_business_2019_br` é um dataframe de exemplo com dados de receita de negócios para 2019
+Compreender os dados que você usa é muito importante. Para este treinamento, `base_nfe` é um dataframe de exemplo com dados de items de Notas Fiscais Eletronicas para Out-Dez 2024:
 
-- `modified_id` é o identificador do negócio
-- `region` é a região onde o negócio está localizado
-- `income` é a receita que o negócio reportou em 2019
+&lt;details&gt;
+&lt;summary&gt;&lt;b&gt;Colunas ou Variáveis&lt;/b&gt;&lt;/summary&gt;
 
-&lt;img src="img/session1/data-viewer-br.png" width="50%" style="display: block; margin: auto;" /&gt;
+- `nfuid_anon` é o identificador da NFe
+- `dt_emissao` e `mes_emissao` indicam datas de emissão
+- `emitcnpj9_anon` é identificador anonimizado de CNPJ 8 digitos
+- `xprod` é descrição do item
+- `vprod` e `vicms` são valores de venda e ICMS
+- `cfop` é Código Fiscal de Operações e Prestações
+
+&lt;/details&gt;
+&lt;img src="img/session1/data-viewer-br.png" width="80%" style="display: block; margin: auto;" /&gt;
 
 ---
 
@@ -462,13 +471,12 @@ Compreender os dados que você usa é muito importante. Para este treinamento, `
 
 ## Exercício 4: Subconjunto de dados
 
-1. Use o seguinte código para criar um subconjunto de `small_business_2019_br` mantendo apenas as observações na região chamada:  "Pelotas": `df_pelotas &lt;- subset(small_business_2019_br, region == "Pelotas")`
+1. Use o seguinte código para criar um subconjunto de `base_nfe` mantendo apenas as observações de NFe emitidas em Outubro (mês 10): `base_outubro = subset(base_nfe, mes_emissao == 10)`
 
-  + Note que estamos usando o operador de seta (`&lt;-`) para armazenar o resultado
+  + Note que estamos usando o operador de igual (`=`) para armazenar o resultado
   + Note que há **dois sinais de igual** na condição, não um
-  + Também note que você precisa escrever `"Pelotas"` entre aspas e com a letra `P`, pois é assim que está nos dados
   
-2. Use `View(df_pelotas)` para visualizar o dataframe novamente e ver como ele mudou (note a letra maiúscula "V")
+2. Use `View(base_outubro)` para visualizar o dataframe novamente e ver como ele mudou (note a letra maiúscula "V")
 
 ---
 
@@ -481,16 +489,16 @@ Compreender os dados que você usa é muito importante. Para este treinamento, `
 # Dados no R
 ## Armazenando resultados no R
 
-Há uma diferença importante entre usar  `&lt;-` e não usá-lo
+Há uma diferença importante entre usar  `&lt;-` ou `=` e não usá-los
 
--Não usar `&lt;-` **simplesmente exibe o resultado no console**. O dataframe de entrada permanecerá inalterado e o resultado **não será armazenado**
+-Não usar `=` **simplesmente exibe o resultado no console**. O dataframe de entrada permanecerá inalterado e o resultado **não será armazenado**
 
 
-```r
-subset(small_business_2019_br, region == "Pelotas")
+``` r
+subset(base_nfe, mes_emissao == 10)
 ```
 
-&lt;img src="img/session1/console-subset-br.png" width="50%" style="display: block; margin: auto;" /&gt;
+&lt;img src="img/session1/console-subset-br.png" width="70%" style="display: block; margin: auto;" /&gt;
 
 ---
 
@@ -498,13 +506,13 @@ subset(small_business_2019_br, region == "Pelotas")
 
 ## Armazenando resultados no R
 
-- Using `&lt;-` informa ao R que queremos armazenar o resultado em **um novo objeto**, que é o objeto à esquerda da seta. Dessa vez, o resultado não será impresso no console, mas o novo dataframe aparecerá no painel de ambiente
+- Usar `=` informa ao R que queremos armazenar o resultado em **um novo objeto**, que é o objeto à esquerda da seta. Dessa vez, o resultado não será impresso no console, mas o novo dataframe aparecerá no painel de ambiente
 
 
 
 
-```r
-df_pelotas &lt;- subset(small_business_2019_br, region == "Pelotas")
+``` r
+base_outubro = subset(base_nfe, mes_emissao == 10)
 ```
 
 &lt;img src="img/session1/environment3-br.png" width="60%" style="display: block; margin: auto;" /&gt;
@@ -517,7 +525,7 @@ df_pelotas &lt;- subset(small_business_2019_br, region == "Pelotas")
 
 - Lembre-se sempre de que dataframes são apenas objetos no R. O R diferencia a qual dataframe o código se refere pelo nome do dataframe.
 
-&lt;img src="img/session1/multiple-dataframes-br.png" width="95%" style="display: block; margin: auto;" /&gt;
+
 
 ---
 
@@ -544,7 +552,7 @@ name: object-types
 
 
 
-```r
+``` r
 class(x1)
 ```
 
@@ -553,12 +561,8 @@ class(x1)
 ```
 
 
-```r
-class(df_pelotas)
-```
-
-```
-## [1] "data.frame"
+``` r
+class(base_outubro)
 ```
 ---
 
@@ -568,9 +572,9 @@ Até agora, trabalhamos com duas classes de objetos:
 
 - **Numérico:** valores numéricos únicos que podemos usar em operações matemáticas. Os objetos `x1`, `x2`, and `x3` são numéricos. Eles são semelhantes aos valores que você armazenaria em uma célula única do Excel
 
-- **Dataframe:** uma coleção de valores organizados em linhas e colunas. `small_business_2019_br` and `df_pelotas` são dataframes. Eles são semelhantes a uma planilha do Excel.
+- **Dataframe:** uma coleção de valores organizados em linhas e colunas. `base_nfe` and `base_outubro` são dataframes. Eles são semelhantes a uma planilha do Excel.
 
-No próximo exercício, aprenderemos sobre outro tipo de objeto.
+No próximo exercício, aprenderemos sobre outro tipo de objeto. (para consulta própria)
 
 ---
 
@@ -585,7 +589,7 @@ No próximo exercício, aprenderemos sobre outro tipo de objeto.
 - Você pode criar vetores com a função `c()`, e os elementos do vetor são separados por vírgulas.
 
 
-```r
+``` r
 my_vector &lt;- c(4, 8, 2, 5)
 ```
 
@@ -598,28 +602,28 @@ my_vector &lt;- c(4, 8, 2, 5)
 1- Crie um vetor com os elementos 3, 8 e 10 e nomeie-o como `v1`:
 
 
-```r
+``` r
 v1 &lt;- c(3, 8, 10)
 ```
 
 2- Crie um segundo vetor com os elementos 7, 2 e 5 e nomeie-o como `v2`
 
 
-```r
+``` r
 v2 &lt;- c(7, 2, 5)
 ```
 
 3- Crie um terceiro vetor chamado `result1` om a soma de `v1` e `v2`:
 
 
-```r
+``` r
 result1 &lt;- v1 + v2
 ```
 
 4- Por fim, crie um quarto vetor chamado `result2` om a soma de `v2` mais dez:
 
 
-```r
+``` r
 result2 &lt;- v2 + 10
 ```
 
@@ -671,7 +675,10 @@ name: functions-in-r
 - Tudo o que tem um nome seguido de parênteses é uma função no R
 
 
-&lt;img src="img/session1/function-br.png" width="95%" style="display: block; margin: auto;" /&gt;
+
+``` r
+subset(base_nfe, mes_emissao == 10)
+```
 
 ---
 
@@ -692,7 +699,7 @@ As funções têm a seguinte sintaxe:
 
 # Funções no R
 
-- O resultado de uma função pode sempre ser armazenado em um objeto utilizando o operador de seta (`&lt;-`)
+- O resultado de uma função pode sempre ser armazenado em um objeto utilizando o operador de seta (`&lt;-`) ou igual (`=`)
 
 &lt;img src="img/session1/function-stored-br.png" width="95%" style="display: block; margin: auto;" /&gt;
 
@@ -704,7 +711,7 @@ As funções têm a seguinte sintaxe:
 
 ## Exercício 6: Usando a função `summary()`
 
-1. Calcule as estatísticas descritivas das variáveis de  `small_business_2019_br` e armazene o resultado com `summary_table &lt;- summary(small_business_2019_br)`
+1. Calcule as estatísticas descritivas das variáveis de  `base_nfe` e armazene o resultado com `summary_table &lt;- summary(base_nfe)`
 
 2. Imprima o resultado armazenado com `print(summary_table)`
 
@@ -712,7 +719,7 @@ As funções têm a seguinte sintaxe:
 
 # Funções no R
 
-Observe que este código está tanto criando um novo objeto (com `summary_table &lt;- summary(small_business_2019_br)`) quanto imprimindo o resultado no console (com `print(small_business_2019_br)`)
+Observe que este código está tanto criando um novo objeto (com `summary_table &lt;- summary(base_nfe)`) quanto imprimindo o resultado no console (com `print(summary_table)`)
 
 &lt;img src="img/session1/summary-result.png" width="75%" style="display: block; margin: auto;" /&gt;
 
@@ -762,7 +769,7 @@ name: wrapping-up
 - Clique no ícone do disquete para salvar seu trabalho.
 - Selecione um local para o seu arquivo e lembre-se de onde está salvando.
 
-&lt;img src="img/session1/save.png" width="65%" style="display: block; margin: auto;" /&gt;
+&lt;img src="img/session1/code-comments.png" width="65%" style="display: block; margin: auto;" /&gt;
 
 ---
 
@@ -796,72 +803,6 @@ class: inverse, center, middle
 # Obrigado! // Thanks! // ¡Gracias! 
 
 &lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#D38C28' size=1px width=1100px&gt;&lt;/html&gt;
-
----
-
-class: inverse, center, middle
-name: appendix
-
-# Appendix 
-
-&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#D38C28' size=1px width=1100px&gt;&lt;/html&gt;
-
----
-
-# Appendix 
-
-## Tipos de objetos: cadeias de caracteres
-
-- As cadeias de caracteres são coleções de caracteres alfanuméricos, geralmente representando palavras ou textos, ou apenas caracteres em geral.
-
-
-```r
-s1 &lt;- "Oi!"
-print(s1)
-```
-
-```
-## [1] "Oi!"
-```
-
-- As cadeias de caracteres **sempre ficam entre aspas** (`" "`)
-
-- Elas são geralmente chamadas apenas de **strings**
-
----
-
-# Appendix 
-## Exercise: create and operate character strings
-
-1. Create a character string object with the words `"Georgia has great"` and name it `words1`
-
-2. Create a second string with the words `"wine"` and name it `words2` 
-
-  + Don't forget to use `&lt;-` to create the string objects
-  + Remember to include the quotes: `" "`
-
-3. Use the following code to concatenate `words1` and `words2`, save the result in `words_result`, and print it:
-
-
-```r
-words_result &lt;- paste(words1, words2)
-print(words_result)
-```
-
----
-
-# Appendix 
-## Object types: character strings
-
-&lt;img src="img/session1/ex6.png" width="45%" style="display: block; margin: auto;" /&gt;
-
----
-
-# Appendix 
-
-## Object types: character strings
-
-&lt;img src="img/session1/ex6-environment.png" width="60%" style="display: block; margin: auto;" /&gt;
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
