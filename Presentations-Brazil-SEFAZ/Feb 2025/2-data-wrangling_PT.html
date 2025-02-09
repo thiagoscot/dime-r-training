@@ -1,0 +1,1057 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Sessão 2 - Tratamento de dados</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Thiago Scot" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/panelset/panelset.css" rel="stylesheet" />
+    <script src="libs/panelset/panelset.js"></script>
+    <script src="libs/xaringanExtra-webcam/webcam.js"></script>
+    <script id="xaringanExtra-webcam-options" type="application/json">{"width":"200","height":"200","margin":"1em"}</script>
+    <script src="libs/clipboard/clipboard.min.js"></script>
+    <link href="libs/xaringanExtra-clipboard/xaringanExtra-clipboard.css" rel="stylesheet" />
+    <script src="libs/xaringanExtra-clipboard/xaringanExtra-clipboard.js"></script>
+    <script>window.xaringanExtraClipboard(null, {"button":"Copy Code","success":"Copied!","error":"Press Ctrl+C to Copy"})</script>
+    <script>window.xaringanExtraClipboard(null, {"button":"Copy Code","success":"<i class=\"fa fa-check\" style=\"color: #90BE6D\"><\/i>","error":"<i class=\"fa fa-times-circle\" style=\"color: #F94144\"><\/i>"})</script>
+    <link href="libs/font-awesome/css/all.min.css" rel="stylesheet" />
+    <link href="libs/font-awesome/css/v4-shims.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="libs/remark-css/default.css" type="text/css" />
+    <link rel="stylesheet" href="libs/remark-css/metropolis.css" type="text/css" />
+    <link rel="stylesheet" href="libs/remark-css/metropolis-fonts.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# Sessão 2 - Tratamento de dados
+]
+.subtitle[
+## Treinamento em R - SEFAZ RS-WB DIME
+]
+.author[
+### Thiago Scot
+]
+.date[
+### The World Bank | Fevereiro 2025
+]
+
+---
+
+  
+
+
+&lt;style type="text/css"&gt;
+@media print {
+  .has-continuation {
+    display: block !important;
+  }
+}
+&lt;/style&gt;
+
+# Índice
+
+1. [Sobre esta sessão](#sobre-esta-sessao)
+2. [Bibliotecas R](#bibliotecas-r)
+3. [Manipulação de dados](#manipulacao-de-dados)
+4. [Filtragem e ordenação](#filtragem-e-ordenacao)
+5. [Junção de dataframes](#juncao-de-dataframes)
+6. [Exportação de resultados](#exportacao-de-resultados)
+7. [Conclusão](#conclusao)
+8. [Apêndice](#apendice)
+
+---
+
+class: inverse, center, middle
+name: sobre-esta-sessao
+
+# Sobre esta sessão
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#D38C28' size=1px width=1100px&gt;&lt;/html&gt;
+  
+---
+
+# Sobre esta sessão
+
+&lt;img src="img/session2/data-work-script.png" width="90%" style="display: block; margin: auto;" /&gt;
+
+---
+  
+# Sobre esta sessão
+  
+&lt;img src="img/session2/session2.png" width="90%" style="display: block; margin: auto;" /&gt;
+
+---
+
+class: inverse, center, middle
+name: bibliotecas-r
+
+# Bibliotecas R
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#D38C28' size=1px width=1100px&gt;&lt;/html&gt;
+  
+---
+
+# Bibliotecas R
+
+- Instalar o R no seu computador fornece acesso às suas funções básicas.
+- Além disso, você pode instalar bibliotecas. Bibliotecas são pacotes de funções adicionais do R que permitem:
+  + Executar operações que as funções básicas do R não fazem (exemplo: trabalhar com dados geográficos)
++ Realizar operações que o R básico faz, mas de forma mais fácil (exemplo: manipulação de dados)
+
+---
+  
+# Bibliotecas R
+
+Em resumo:
+
+&lt;img src="img/session2/r-libraries.png" width="90%" style="display: block; margin: auto;" /&gt;
+
+---
+  
+# Bibliotecas R
+
+## Instalando bibliotecas R
+
++ A instalação de bibliotecas geralmente é simples, mas pode ser desafiadora em conexões institucionais, como no Banco Mundial ou na SEFAZ.
+
++ O próximo exercício configurará o RStudio para instalar bibliotecas sem problemas.
+
++ Nota: os pacotes já devem estar instalados nas suas máquinas
+
+---
+  
+# Bibliotecas R
+
+## Exercício 1: Configurar a instalação de bibliotecas
+
+1. No RStudio, vá para `Tools` &gt;&gt; `Global Options...`
+
+&lt;img src="img/session2/global-options.png" width="60%" style="display: block; margin: auto;" /&gt;
+
+---
+  
+# Bibliotecas R
+
+## Exercício 1: Configurar a instalação de bibliotecas
+
+.pull-left[
+  2. Selecione `Packages` no painel esquerdo.
+  3. Desmarque `Use secure download method for HTTP`.
+  4. Clique em `OK`.
+  
+  Você não verá nenhuma mudança na janela do RStudio, mas agora será possível instalar bibliotecas sem problemas.
+]
+
+.pull-right[
+&lt;img src="img/session2/packages-options.png" width="90%" style="display: block; margin: auto;" /&gt;
+]
+
+---
+  
+# Bibliotecas R
+
+Utilizaremos a biblioteca `dplyr` na sessão de hoje.
+
+## Exercício 2: Instalando bibliotecas
+
+1. Instale a biblioteca com:
+  
+
+``` r
+install.packages("dplyr")
+```
+
+- Note o uso de aspas (`" "`) nos nomes dos pacotes.
+- **Digite este código no console**, não no script.
+
+&lt;img src="img/session2/dplyr-install.png" width="50%" style="display: block; margin: auto;" /&gt;
+
+---
+  
+# Bibliotecas R
+
+Agora que `dplyr` está instalado, precisamos carregá-lo para usar suas funções.
+
+## Exercício 3: Carregar bibliotecas
+
+.pull-left[
+  1. Abra um novo script com `File` &gt;&gt; `New File` &gt;&gt; `R Script`.
+  2. Carregue `dplyr` com:
+    
+
+``` r
+  library(dplyr)
+```
+  
+  - Execute este código no novo script aberto.
+  - Note que **não utilizamos aspas** nos nomes das bibliotecas ao carregá-las.
+]
+.pull-right[
+&lt;img src="img/session2/loading-dplyr.png" width="90%" style="display: block; margin: auto;" /&gt;
+]
+
+---
+  
+# Bibliotecas R // Bibliotecas R
+
+- Instalação da biblioteca:
+
+&lt;img src="img/session2/installation.png" width="37%" style="display: block; margin: auto;" /&gt;
+
+- Carregamento da biblioteca:
+  
+&lt;img src="img/session2/loading.png" width="37%" style="display: block; margin: auto;" /&gt;
+
+- Você instala as bibliotecas do R apenas uma vez no seu computador
+
+- Você carrega as bibliotecas sempre que abre uma nova janela do RStudio (somente carregue as bibliotecas que usará)
+
+---
+
+class: inverse, center, middle
+name: data-wrangling
+
+# Manipulação de dados // Data Wrangling
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#D38C28' size=1px width=1100px&gt;&lt;/html&gt;
+  
+---
+
+# Manipulação de dados // Data Wrangling
+
+## Preparando seus dados
+
+- Os dados raramente estão em um formato pronto para serem convertidos diretamente em um resultado
+
+- Em programação estatística, o processo de transformar dados em uma condição pronta para ser convertida em um resultado é chamado de **manipulação de dados**
+  
+&lt;img src="img/session2/data-wrangling.png" width="90%" style="display: block; margin: auto;" /&gt;
+
+---
+  
+# Manipulação de dados // Data Wrangling
+
+## Preparando seus dados
+
+- A manipulação de dados é um dos aspectos mais cruciais e demorados do trabalho com dados
+
+- Envolve não apenas a codificação, mas também o exercício mental de pensar qual deve ser a estrutura e condição do seu dataframe para produzir o resultado desejado
+
+&lt;img src="img/session2/data-wrangling-reasoning.png" width="90%" style="display: block; margin: auto;" /&gt;
+
+---
+  
+# Manipulação de dados // Data Wrangling
+
+## Preparando seus dados
+
+.pull-left[
+  - Como mencionamos antes, usaremos `dplyr` e `tidyr` para manipulação de dados neste treinamento
+  
+  - Você também pode usar R básico, mas recomendamos essas bibliotecas porque suas funções são mais fáceis de usar
+  
+  - Num próximo passo, recomendo uso de `data.table` como ferramenta poderosa de análise de grandes bases
+]
+.pull-right[
+  &lt;img src="img/session2/dplyr.png" width="90%" style="display: block; margin: auto;" /&gt;
+]
+
+---
+  
+# Manipulação de dados // Data Wrangling
+
+## Exercício 4: Carregando dados
+
+Esta parte é igual ao exercício que fizemos na sessão 1, mas não há problema em repeti-la para iniciar uma nova sessão do RStudio. **Se você tem o RStudio aberto, feche a janela e abra o RStudio novamente**.
+
+.pull-left[
+  1. Na sua nova janela do RStudio, vá para `File` &gt; `Import Dataset` &gt; `From Text (base)` e selecione novamente o arquivo `base_nfe.csv`
+  
+  + se você não sabe onde o arquivo está, verifique a pasta `Downloads`
+  
+  1. Certifique-se de selecionar `Heading` &gt; `Yes` na próxima janela
+  
+  1. Selecione `Import`
+  
+  1. Faça o mesmo para o banco de dados `base_emissor.csv`
+  
+]
+.pull-right[
+  
+&lt;img src="img/session1/import3-1.png" width="85%" style="display: block; margin: auto;" /&gt;
+]
+
+---
+  
+# Manipulação de dados // Data Wrangling
+
+
+
+&lt;img src="img/session2/ex4-br.png" width="85%" style="display: block; margin: auto;" /&gt;
+
+---
+  
+# Manipulação de dados // Data Wrangling
+
+## Nota: carregando dados com uma função
+
+- Você também pode carregar dados CSV com a função `read.csv()` ou `data.table::fread()` em vez de usar esse método manual
+
+- O primeiro argumento de `read.csv()` ou `data.table::fread()` é o caminho no seu computador onde os dados estão localizados. Por exemplo:
+  
+
+``` r
+base_emissor &lt;- read.csv("/Users/tscot/Downloads/Treinamento_SEFAZ/base_emissor.csv")
+base_emissor &lt;- fread('/Users/tscot/Downloads/Treinamento_SEFAZ/base_emissor.csv')
+```
+
+- Como sempre, você precisa armazenar o resultado da função em um objeto dataframe com o operador `&lt;-` ou `=` para que ele seja salvo no ambiente
+
+---
+  
+# Manipulação de dados // Data Wrangling
+
+## Recapitulando: Conhecendo seus dados
+  
+- O dataframe `base_nfe` é o mesmo da sessão anterior, contendo informações ao nível de item da NFe
+- O dataframe `base_emissor` é um dataframe no nível do emissor
+- A coluna `emitcnpj8_anon` é um identificador anônimo do emissor e `emitxnomefantasia` é um nome aleatório
+- A coluna `emituf` indica a unidade federativa do emissor
+
+&lt;img src="img/session2/data-viewer-2.png" width="60%" style="display: block; margin: auto;" /&gt;
+
+---
+  
+# Manipulação de dados // Data Wrangling
+
+- Usaremos este dataframe apenas em um dos próximos exercícios, mas o carregamos agora porque é uma boa prática ter os dados carregados na memória para pronto uso
+
+- Nos próximos exercícios, enfrentaremos cenários que nos mostrarão operações de manipulação de dados necessárias
+
+---
+
+class: inverse, center, middle
+name: filtragem-classificacao
+
+# Filtragem e classificação
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#D38C28' size=1px width=1100px&gt;&lt;/html&gt;
+
+---
+
+# Filtragem e classificação
+
+## Solicitação de trabalho com dados
+
+**Cenário 1**: Imagine que você recebe a seguinte solicitação:
+
+*"A Receita Estadual está investigando valores inconsistentes em NFes em dezembro. Gostaríamos que você extraísse os 50 maiores valores de itens para NFes emitidas em dezembro - você poderia produzir essa lista?"*
+
+---
+
+class: inverse, center, middle
+name: filtragem-classificacao
+
+# Filtragem e Classificação
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#D38C28' size=1px width=1100px&gt;&lt;/html&gt;
+  
+---
+  
+# Filtragem e Classificação
+
+## Solicitação de Trabalho com Dados
+
+A manipulação dos dados aqui envolve várias operações:
+
+1. Manter apenas as NFes de dezembro  
+2. Ordenar pelos valores dos itens  
+3. Manter apenas os 50 primeiros itens  
+
+&lt;img src="img/session2/filtering-sorting-planning.png" width="95%" style="display: block; margin: auto;" /&gt;
+
+---
+  
+# Filtragem e Classificação
+
+## 1. Manter apenas as NFes de dezembro  
+
+Use `filter()` para isso:
+
+
+``` r
+temp1 &lt;- filter(base_nfe, mes_emissao == 12)
+```
+
+&lt;img src="img/session2/filtering-sorting1.png" width="95%" style="display: block; margin: auto;" /&gt;
+
+---
+  
+# Filtragem e Classificação
+
+## 2. Ordenar pelos valores dos itens  
+
+Use a função `arrange()` para ordenar. Por padrão, a ordenação no R é crescente. Incluímos o símbolo de menos (`-`) antes de `vprod` para ordenar de forma decrescente:
+
+
+``` r
+temp2 &lt;- arrange(temp1, -vprod)
+```
+
+&lt;img src="img/session2/filtering-sorting2.png" width="95%" style="display: block; margin: auto;" /&gt;
+
+---
+  
+# Filtragem e Classificação
+
+## 3. Manter apenas os 50 primeiros itens após a ordenação  
+
+Use `filter()` novamente com o comando auxiliar `row_number()`
+
+
+``` r
+result_scenario1 &lt;- filter(temp2, row_number() &lt;= 50)
+```
+
+&lt;img src="img/session2/filtering-sorting3.png" width="95%" style="display: block; margin: auto;" /&gt;
+
+---
+  
+# Filtragem e Classificação
+
+## Exercício 5: Filtre e classifique seus dados  
+
+Agora que identificamos o formato do dataframe resultante e como obtê-lo, podemos escrever o código para isso.
+
+1.- Seleção de linhas:
+  
+
+``` r
+temp1 &lt;- filter(base_nfe, mes_emissao == 10)
+```
+
+2.- Ordenação decrescente pelo valor do produto:
+  
+
+``` r
+temp2 &lt;- arrange(temp1, -vprod)
+```
+
+3.- Manter apenas os 50 primeiros itens:
+  
+
+``` r
+result_scenario1 &lt;- filter(temp2, row_number() &lt;= 50)
+```
+
+---
+  
+# Filtragem e Classificação
+
+## Algumas notas:
+
+.pull-left[
+  - `filter()`, `arrange()`, e `row_number()` são funções do `dplyr`. Lembre-se de carregar `dplyr` primeiro com `library(dplyr)`
+  - Criamos dois dataframes intermediários: `temp1` e `temp2`
+  - Podemos evitar isso usando o operador pipe (`%&gt;%`), muito comum no R, mas não abordado nesta sessão  
+  - O dataframe resultante é `result_scenario1`
+]
+.pull-right[
+  &lt;img src="img/session3/temp_dfs.png" width="95%" style="display: block; margin: auto;" /&gt;
+]
+
+---
+  
+# Filtragem e Classificação
+
+Você pode verificar o resultado com `View(result_scenario1)`. Agora este dataframe contém exatamente o que precisávamos!
+
+&lt;img src="img/session2/ex5-3.png" width="70%" style="display: block; margin: auto;" /&gt;
+
+---
+  
+# Filtragem e Classificação
+
+- Filtragem e classificação são operações comuns na manipulação de dados no R  
+- Agora veremos uma nova operação muito útil: **junção de dados** (merging)
+
+---
+
+class: inverse, center, middle
+name: merging
+
+# Junção de Dataframes
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#D38C28' size=1px width=1100px&gt;&lt;/html&gt;
+  
+---
+
+# Junção de Dataframes
+
+- Exploraremos mais uma operação comum na manipulação de dados: junção  
+- A junção de dados é usada para combinar colunas de um dataframe com outro  
+- Para isso, utilizamos uma "chave" que identifica as mesmas unidades nos diferentes dataframes  
+
+&lt;img src="img/session2/merge.png" width="80%" style="display: block; margin: auto;" /&gt;
+
+*Nota: Imagem retirada do guia de manipulação de dados do RStudio.*
+
+
+---
+
+# Junção de Dataframes
+
+## Pedido de Análise de dados
+
+**Cenário 2:**
+
+*"Nós precisamos do valor total de ICMS das NFes somente pra emissores de fora do Estado. Você talvez queira utilizar a nova base de dados no nível do emissor para este exercício"*
+
+
+---
+
+# Junção de Dataframes
+
+## Pedido de Análise de dados
+
+Esses são os passos que precisamos seguir:
+
+1. Selecionar as variaveis relevantes da `base_nfe`
+1. Juntar as bases de dados
+1. Filtrar somente emissores de fora do RS
+1. Calcular o valor total de ICMS dessas notas
+
+---
+
+# Junção de Dataframes
+
+## 1. Selecionar as variaveis relevantes da `base_nfe`
+
+Use `select()` pra esse passo:
+
+
+``` r
+temp1 &lt;- select(base_nfe, nfuid_anon, emitcnpj8_anon, vicms)
+```
+
+&lt;img src="img/session2/merging1.png" width="80%" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Junção de Dataframes
+
+## 2. Juntar as bases de dados
+
+Use `left_join()` pra juntar as bases:
+
+
+``` r
+temp2 &lt;- left_join(temp1, base_emissor, by = "emitcnpj8_anon")
+```
+
+- Os dois primeiros argumentos são as bases que queremos juntar
+- O terceiro argumento (com um nome) é a variável-chave que conecta as bases
+
+&lt;img src="img/session2/merging2.png" width="55%" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Junção de Dataframes
+
+## 3. Filtrar somente emissores de fora do RS
+
+Use `filter()` outra vez:
+
+
+``` r
+temp3 &lt;- filter(temp2, emituf != "RS")
+```
+
+&lt;img src="img/session2/merging3.png" width="80%" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Junção de Dataframes
+
+## 4. Calcular o valor total de ICMS dessas notas
+
+Use `summarise()` e `sum()`.
+
+- `summarise()` nos permite agregar os dados usando uma função; nesse caso a soma (`sum()`)
+
+
+``` r
+total_income &lt;- summarise(temp3, sum(vicms))
+```
+
+
+&lt;img src="img/session2/merging4.png" width="80%" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Junção de Dataframes
+
+## Exercício 6: Juntando as bases de dados
+
+Aplique os passos discutidos anteriormente pra calcular o valor total de ICMS nas NFes emitidas fora do RS
+
+1. Selecionar as variaveis relevantes da `base_nfe`
+
+
+``` r
+temp1 &lt;- select(base_nfe, nfuid_anon, emitcnpj8_anon, vicms)
+```
+
+2.- Juntar as bases de dados
+
+
+``` r
+temp2 &lt;- left_join(temp1, base_emissor, by = "emitcnpj8_anon")
+```
+
+3.- Filtrar somente emissores de fora do RS
+
+
+``` r
+temp3 &lt;- filter(temp2, emituf != "RS")
+```
+
+4. Calcular o valor total de ICMS dessas notas
+
+
+``` r
+total_income &lt;- summarise(temp3, sum(vicms))
+```
+
+---
+
+# Junção de Dataframes
+
+`total_income` é uma base de dados com uma observação e o valor que buscamos
+
+
+
+
+``` r
+print(total_income)
+```
+
+```
+##   sum(vicms)
+## 1   254145.5
+```
+
+---
+
+# Junção de Dataframes
+
+Esse foram alguns exemplos de como limpar dados. Outras operações comuns incluem:
+
+| Operação | Função no `dplyr` |
+| --------- | ---------------- |
+| Selecionar colunas | `select()` |
+| Filtrar linhas (com base em uma condição) | `filter()` |
+| Criar novas colunas | `mutate()` |
+| Criar novas colunas com base em uma condição | `mutate()` e `case_when()` |
+| Adicionar novas linhas | `add_row()` |
+| Mesclar dataframes | `inner_join()`, `left_join()`, `right_join()`, `full_join()` |
+| Empilhar dataframes | `bind_rows()` |
+| Remover duplicatas | `distinct()` |
+| Agrupar e criar indicadores resumidos | `group_by()`, `summarize()` |
+| Passar um resultado como primeiro argumento para a próxima função | `%&gt;%` (operador, não função) |
+
+
+---
+
+class: inverse, center, middle
+name: exporting-outputs
+
+# Exportando resultados
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#D38C28' size=1px width=1100px&gt;&lt;/html&gt;
+
+
+---
+
+# Exportando resultados
+
+- Até agora, vimos exemplos das partes 1 e 2 do trabalho com dados
+- E como exportar resultados?
+
+&lt;img src="img/session2/data-work-progress.png" width="90%" style="display: block; margin: auto;" /&gt;
+
+- Vamos ver no próximo exercício
+
+---
+
+# Exportando resultados
+
+## Exportando dataframes
+
+- A maneira mais fácil de exportar um dataframe ou número é com a função `write.csv()`
+
+- `write.csv()` cria um arquivo CSV com o dataframe
+
+- Ele recebe dois argumentos básicos:
+
+  1. O nome do objeto que você deseja exportar
+  1. Um caminho de arquivo para exportar o objeto
+
+- `write.csv()` inclui os números das linhas por padrão. Você pode adicionar o argumento `row.names = FALSE` para evitar isso
+
+---
+
+# Exportando resultados
+
+## Exercício 7: Exporte `result_scenario1` e `total_income`
+
+1. Use este código para exportar os resultados dos dois últimos exercícios:
+
+
+``` r
+write.csv(result_scenario1,
+          "result_scenario1.csv",
+          row.names = FALSE)
+
+write.csv(total_income,
+          "total_income.csv",
+          row.names = FALSE)
+```
+
+---
+
+# Exportando resultados
+
+Agora `result_scenario1.csv` e `total_income.csv` devem aparecer no seu computados (provavelmente no folder `Documents`).
+
+&lt;img src="img/session2/exported-csv.png" width="70%" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Exportando resultados
+
+## Comentários sobre caminhos (*paths*)
+
+- O segundo argumento de `write.csv()` especifica o caminho do arquivo que vamos exportar
+
+
+``` r
+write.csv(result_scenario1,
+          "result_scenario1.csv",
+          row.names = FALSE)
+```
+
+- Você pode incluir qualquer caminho no seu computador e o R vai salvar nessa localização
+
+  + Por exemplo: `"/Users/tscot/Downloads`" exporta os resultados pra pasta de *downloads* do meu computados (isso não funcionaria em outras máquinas)
+  
+  + Note que o caminho no R usa barra a direita (*forward slashes*) (`/`). Barra invertida (*back slash*) (`\`) **do not work in R**
+
+---
+
+# Exportando resultados
+
+## Comentários sobre caminhos (*paths*)
+
+
+``` r
+write.csv(result_scenario1,
+          "result_scenario1.csv",
+          row.names = FALSE)
+```
+
+- Se você só incluir o nome do arquivo, R vai exportar pra localização atual do RStudio - normalmente o folder `Documents`
+
+- Você pode checar a localização atual do RStudio com a função `getwd()`
+
+---
+
+# Exportando resultados
+
+Nosso pipeline de dados agora está completo!!!
+
+&lt;img src="img/session2/data-work-final-table.png" width="70%" style="display: block; margin: auto;" /&gt;
+
+---
+
+class: inverse, center, middle
+name: finalizando
+
+# Finalizando
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#D38C28' size=1px width=1100px&gt;&lt;/html&gt;
+  
+---
+
+# Finalizando
+
+- Não se esqueça de salvar seu trabalho!  
+- Utilize `#` para adicionar comentários no código  
+- Salve seu arquivo em um local seguro  
+
+&lt;img src="img/session2/save.png" width="55%" style="display: block; margin: auto;" /&gt;
+
+---
+  
+# Conclusão
+  
+- Exploramos operações essenciais de manipulação de dados  
+- Aplicamos filtragem, ordenação, junção e exportação de resultados  
+- Essas técnicas são fundamentais para análise de dados no R  
+
+&lt;img src="img/session2/data-work-final.png" width="85%" style="display: block; margin: auto;" /&gt;
+
+---
+  
+# Finalizando
+
+## Pipeline de trabalho com dados
+
+&lt;img src="img/session2/data-work-day-2.png" width="85%" style="display: block; margin: auto;" /&gt;
+
+---
+
+class: inverse, center, middle
+name: apendice
+
+# Apêndice
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#D38C28' size=1px width=1100px&gt;&lt;/html&gt;
+
+---
+
+# Apêndice
+
+## Agregação
+
+**Cenário:** Imagine que você recebe a seguinte solicitação:
+
+*"Estamos preparando um relatório onde queremos incluir o valor total e médio por produto. Você pode calcular esses números?"*
+
+---
+
+# Apêndice
+
+## Agregação
+
+A manipulação dos dados aqui envolve várias operações:
+
+1. Manter apenas as colunas relevantes e descartar as demais  
+2. Agrupar o dataframe por produto  
+3. Calcular o valor total por produto  
+4. Calcular o valor médio por produto  
+
+A operação de transformar um dataframe com um nível mais baixo de observações (exemplo: NFE) para um nível agregado (exemplo: produto) é chamada de **agregação**.
+
+---
+  
+# Apêndice
+
+## 1. Manter apenas as colunas relevantes
+
+Use `select()` para isso:
+
+
+``` r
+temp1 &lt;- select(base_nfe, xprod, vprod)
+```
+
+---
+  
+# Apêndice
+
+## 2. Agrupar por produto
+
+Use `group_by()`:
+
+
+``` r
+temp2 &lt;- group_by(temp1, xprod)
+```
+
+---
+  
+# Apêndice
+
+## 3. Calcular as colunas agregadas: valor total e médio
+
+Use `summarize()` combinado com `sum()` e `mean()`:
+
+
+``` r
+product_df &lt;- summarize(temp2,
+                        total = sum(vprod),
+                        average = mean(vprod))
+```
+
+---
+  
+# Apêndice
+
+## Exercício: Agregue seus dados
+
+Agora podemos escrever o código para executar a agregação de dados.
+1. Seleção de colunas: `temp1 &lt;- select(base_nfe, xprod, vprod)`  
+2. Agrupamento por produto: `temp2 &lt;- group_by(temp1, xprod)`  
+3. Cálculo do total e da média por produto:
+  
+
+``` r
+product_df &lt;- summarize(temp2,
+                        total = sum(vprod),
+                        average = mean(vprod))
+```
+
+Algumas observações:
+  
+- Lembre-se de que todas essas funções fazem parte do `dplyr`  
+- Há uma quebra de linha e um espaço de tabulação entre cada argumento de `summarize()`. Isso é utilizado para maior clareza no código, mas o R ignora essas quebras de linha e espaços quando usados entre os argumentos das funções  
+
+---
+  
+# Apêndice
+
+## Agregação
+
+Você pode verificar o resultado com `View(product_df)`. Agora seus dados estão agregados exatamente como necessário!
+
+&lt;img src="img/session2/aggregate_final.png" width="85%" style="display: block; margin: auto;" /&gt;
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:9",
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

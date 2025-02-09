@@ -123,32 +123,21 @@ knitr::include_graphics("img/session3/install.png")
 
 # Introduction // გაცნობა
 
-## Exercise 1b: Download and load the data we'll use
+## Exercise 1b: Load the data we'll use
 
-.pull-left[
-1. Go to https://osf.io/z8snr and download the file
-
-1. In RStudio, go to `File` > `Import Dataset` > `From Text (base)` and select the file `small_business_2019_all.csv`
-
-  + If you don't know where the file is, remember to check in your `Downloads` folder
-
-1. Select `Import`
-]
-
-.pull-right[
-```{r echo = FALSE, out.width="85%"}
-knitr::include_graphics("img/session3/import.png")
+```{r, eval=FALSE}
+base_emissor <- read.csv("/Users/tscot/Downloads/Treinamento_SEFAZ/base_emissor.csv")
+base_nfe <- read.csv('/Users/tscot/Downloads/Treinamento_SEFAZ/base_nfe.csv')
 ```
-]
 
 ---
 
 # Introduction // გაცნობა
 
-You should have one dataframe loaded in the environment after this.
+You should have these two dataframes loaded in the environment after this.
 
 ```{r echo = FALSE, out.width="90%"}
-knitr::include_graphics("img/session3/environment.png")
+knitr::include_graphics("img/session2/ex4-br.png")
 ```
 
 ---
@@ -157,14 +146,8 @@ knitr::include_graphics("img/session3/environment.png")
 
 ## Recap: always know your data!
 
-- This data is similar to the one we used before
-- Every row is one business in one tax period (month)
-- `modified_id` is a business identifier
-- We also have information about the region, firm age, monthly income, VAT liability
-- There is one more variable we didn't see before: `group` contains the group the firm was assigned to in a random experiment
-
-```{r echo = FALSE, out.width="40%"}
-knitr::include_graphics("img/session3/df.png")
+```{r echo = FALSE, out.width="70%"}
+knitr::include_graphics("img/session1/data-viewer-br.png")
 ```
 
 ---
@@ -185,21 +168,21 @@ name: piping
 - You probably remember this piece of code from one of yesterday's exercise:
 
 ```{r eval= FALSE}
-# Filter only businesses in Tbilisi:
-temp1 <- filter(small_business_2019, region == "Tbilisi")
+# Filter only NFes from December:
+temp1 <- filter(base_nfe, mes_emissao == 12)
 
-# Sort previous result by income, descending order:
-temp2 <- arrange(temp1, -income)
+# Sort previous result by value, descending order:
+temp2 <- arrange(temp1, -vprod)
 
-# Keep only the 50 first businesses after sorting:
-df_tbilisi_50 <- filter(temp2, row_number() <= 50)
+# Keep only the 50 first items after sorting:
+result_scenario1 <- filter(temp2, row_number() <= 50)
 ```
 
 ---
 
 # Piping
 
-This code works, but the problem with it is that it makes us generate unnecessary intermediate dataframes (`temp1`, `temp2`) that store results temporarily
+This code works, but the problem with it is that it is cumbersome to write and makes us generate unnecessary intermediate dataframes (`temp1`, `temp2`) that store results temporarily
 
 ```{r echo = FALSE, out.width="75%"}
 knitr::include_graphics("img/session3/temp_dfs.png")
@@ -213,26 +196,23 @@ Instead, we can use pipes to **pass the results of a function and apply a new fu
 
 .pull-left[
 ```{r eval= FALSE}
-# Filter only businesses in Tbilisi:
-temp1 <- filter(small_business_2019,
-                region == "Tbilisi")
+# Filter only NFes from December:
+temp1 <- filter(base_nfe, mes_emissao == 12)
 
-# Sort previous result by income, descending order:
-temp2 <- arrange(temp1,
-                 -income)
+# Sort previous result by value, descending order:
+temp2 <- arrange(temp1, -vprod)
 
-# Keep only the 50 first businesses after sorting:
-df_tbilisi_50 <- filter(temp2,
-                        row_number() <= 50)
+# Keep only the 50 first items after sorting:
+result_scenario1 <- filter(temp2, row_number() <= 50)
 ```
 ]
 
 .pull-right[
 ```{r eval=FALSE}
 # The same but with pipes:
-df_tbilisi_50 <- filter(small_business_2019,
-                        region == "Tbilisi") %>%
-  arrange(-income) %>%
+result_scenario1 <- base_nfe %>% 
+  filter(mes_emissao == 12) %>%
+  arrange(-vprod) %>%
   filter(row_number() <= 50)
 ```
 ]
@@ -241,28 +221,26 @@ df_tbilisi_50 <- filter(small_business_2019,
 
 # Piping
 
+
 .pull-left[
 ```{r eval= FALSE}
-# Filter only businesses in Tbilisi:
-temp1 <- filter(small_business_2019,
-                region == "Tbilisi")
+# Filter only NFes from December:
+temp1 <- filter(base_nfe, mes_emissao == 12)
 
-# Sort previous result by income, descending order:
-temp2 <- arrange(temp1,
-                 -income)
+# Sort previous result by value, descending order:
+temp2 <- arrange(temp1, -vprod)
 
-# Keep only the 50 first businesses after sorting:
-df_tbilisi_50 <- filter(temp2,
-                        row_number() <= 50)
+# Keep only the 50 first items after sorting:
+result_scenario1 <- filter(temp2, row_number() <= 50)
 ```
 ]
 
 .pull-right[
 ```{r eval=FALSE}
 # The same but with pipes:
-df_tbilisi_50 <- filter(small_business_2019,
-                        region == "Tbilisi") %>%
-  arrange(-income) %>%
+result_scenario1 <- base_nfe %>% 
+  filter(mes_emissao == 12) %>%
+  arrange(-vprod) %>%
   filter(row_number() <= 50)
 ```
 ]
@@ -275,28 +253,26 @@ There are several important details to notice here:
 
 # Piping
 
+
 .pull-left[
 ```{r eval= FALSE}
-# Filter only businesses in Tbilisi:
-temp1 <- filter(small_business_2019,
-                region == "Tbilisi")
+# Filter only NFes from December:
+temp1 <- filter(base_nfe, mes_emissao == 12)
 
-# Sort previous result by income, descending order:
-temp2 <- arrange(temp1,
-                 -income)
+# Sort previous result by value, descending order:
+temp2 <- arrange(temp1, -vprod)
 
-# Keep only the 50 first businesses after sorting:
-df_tbilisi_50 <- filter(temp2,
-                        row_number() <= 50)
+# Keep only the 50 first items after sorting:
+result_scenario1 <- filter(temp2, row_number() <= 50)
 ```
 ]
 
 .pull-right[
 ```{r eval=FALSE}
 # The same but with pipes:
-df_tbilisi_50 <- filter(small_business_2019,
-                        region == "Tbilisi") %>%
-  arrange(-income) %>%
+result_scenario1 <- base_nfe %>% 
+  filter(mes_emissao == 12) %>%
+  arrange(-vprod) %>%
   filter(row_number() <= 50)
 ```
 ]
@@ -307,28 +283,26 @@ df_tbilisi_50 <- filter(small_business_2019,
 
 # Piping
 
+
 .pull-left[
 ```{r eval= FALSE}
-# Filter only businesses in Tbilisi:
-temp1 <- filter(small_business_2019,
-                region == "Tbilisi")
+# Filter only NFes from December:
+temp1 <- filter(base_nfe, mes_emissao == 12)
 
-# Sort previous result by income, descending order:
-temp2 <- arrange(temp1,
-                 -income)
+# Sort previous result by value, descending order:
+temp2 <- arrange(temp1, -vprod)
 
-# Keep only the 50 first businesses after sorting:
-df_tbilisi_50 <- filter(temp2,
-                        row_number() <= 50)
+# Keep only the 50 first items after sorting:
+result_scenario1 <- filter(temp2, row_number() <= 50)
 ```
 ]
 
 .pull-right[
 ```{r eval=FALSE}
 # The same but with pipes:
-df_tbilisi_50 <- filter(small_business_2019,
-                        region == "Tbilisi") %>%
-  arrange(-income) %>%
+result_scenario1 <- base_nfe %>% 
+  filter(mes_emissao == 12) %>%
+  arrange(-vprod) %>%
   filter(row_number() <= 50)
 ```
 ]
@@ -344,9 +318,9 @@ df_tbilisi_50 <- filter(small_business_2019,
 1. Apply the same filtering and sorting now with pipes
 
 ```{r eval=FALSE}
-df_tbilisi_50 <- filter(small_business_2019,
-                        region == "Tbilisi") %>%
-  arrange(-income) %>%
+result_scenario1 <- base_nfe %>% 
+  filter(mes_emissao == 12) %>%
+  arrange(-vprod) %>%
   filter(row_number() <= 50)
 ```
 
@@ -359,9 +333,9 @@ Now we will not have any annoying intermediate results stored in our environment
 .pull-left[
 ```{r eval=FALSE}
 # The same but with pipes:
-df_tbilisi_50 <- filter(small_business_2019,
-                        region == "Tbilisi") %>%
-  arrange(-income) %>%
+result_scenario1 <- base_nfe %>% 
+  filter(mes_emissao == 12) %>%
+  arrange(-vprod) %>%
   filter(row_number() <= 50)
 ```
 ]
@@ -371,62 +345,6 @@ df_tbilisi_50 <- filter(small_business_2019,
 knitr::include_graphics("img/session3/env-pipes.png")
 ```
 ]
-
----
-
-# Piping
-
-Lastly, we can also add more formatting to this code to improve its clarity even more:
-
-.pull-left[
-```{r eval=FALSE}
-# Previous solution
-df_tbilisi_50 <- filter(small_business_2019,
-                        region == "Tbilisi") %>%
-  arrange(-income) %>%
-  filter(row_number() <= 50)
-```
-]
-
-.pull-right[
-```{r eval=FALSE}
-# The same with better spacing
-df_tbilisi_50 <-
-  small_business_2019 %>%
-  filter(region == "Tbilisi") %>%
-  arrange(-income) %>%
-  filter(row_number() <= 50)
-```
-]
-
----
-
-# Piping
-
-.pull-left[
-```{r eval=FALSE}
-# Previous solution
-df_tbilisi_50 <- filter(small_business_2019,
-                        region == "Tbilisi") %>%
-  arrange(-income) %>%
-  filter(row_number() <= 50)
-```
-]
-
-.pull-right[
-```{r eval=FALSE}
-# The same with better spacing
-df_tbilisi_50 <-
-  small_business_2019 %>%
-  filter(region == "Tbilisi") %>%
-  arrange(-income) %>%
-  filter(row_number() <= 50)
-```
-]
-
-- Good code is code that is both correct (does what it's supposed to) and it's easy to understand
-
-- Piping is **instrumental for writing good code in R**
 
 ---
 
@@ -527,11 +445,8 @@ datasummary_skim(
 1. Use `datasummary_skim()` to create a descriptive statistics table for `small_business_all`
 
 ```{r echo=FALSE}
-small_business_2019_all <- read.csv("data/small_business_2019_all.csv")
-```
-
-```{r eval=FALSE}
-datasummary_skim(small_business_2019_all)
+base_emissor <- read.csv("/Users/tscot/Downloads/Treinamento_SEFAZ/base_emissor.csv")
+base_nfe <- read.csv('/Users/tscot/Downloads/Treinamento_SEFAZ/base_nfe.csv')
 ```
 
 ---
@@ -541,7 +456,7 @@ datasummary_skim(small_business_2019_all)
 You should be seeing this result in the lower right panel of RStudio.
 
 ```{r echo=FALSE}
-datasummary_skim(small_business_2019_all)
+print(datasummary_skim(base_nfe))
 ```
 
 ---
@@ -553,7 +468,7 @@ datasummary_skim(small_business_2019_all)
 - To summarize categorical variables, use the argument `type = "categorical"`
 
 ```{r eval=FALSE}
-datasummary_skim(small_business_2019_all, type = "categorical")
+datasummary_skim(base_emissor, type = "categorical")
 ```
 
 ---
@@ -561,7 +476,7 @@ datasummary_skim(small_business_2019_all, type = "categorical")
 # Quick summary statistics
 
 ```{r echo=FALSE}
-datasummary_skim(small_business_2019_all, type = "categorical")
+print(datasummary_skim(base_emissor, type = "categorical"))
 ```
 
 ---
@@ -571,7 +486,7 @@ datasummary_skim(small_business_2019_all, type = "categorical")
 - `datasummary_skim()` is convenient because it's fast, easy, and shows a lot of information
 
 ```{r echo = FALSE}
-datasummary_skim(small_business_2019_all)
+print(datasummary_skim(base_emissor, type = "categorical"))
 ```
 
 - But what if we wanted to customize what to show? that's when we use `datasummary()` instead, also from the library `modelsummary`
@@ -614,14 +529,14 @@ datasummary(
 
 ## Exercise 4: 
 
-Create a summary statistics table showing the nuber of observations, mean, standard deviation, minimum, and maximum for variables `age`, `income`, and `vat_liability` of the dataframe `small_business_2019_all`
+Create a summary statistics table showing the number of observations, mean, standard deviation, minimum, and maximum for variables `vprod`, `vicms` of the dataframe `base_nfe`
 
 1. Use `datasummary()` for this:
 
 ```{r eval=FALSE}
 datasummary(
-  age + income + vat_liability ~ N + Mean + SD + Min + Max,
-  small_business_2019_all
+  vprod + vicms ~ N + Mean + SD + Min + Max,
+  base_nfe
 )
 ```
 
@@ -630,10 +545,10 @@ datasummary(
 # Customized summary statistics
 
 ```{r echo=FALSE}
-datasummary(
-  age + income + vat_liability ~ N + Mean + SD + Min + Max,
-  small_business_2019_all
-)
+print(datasummary(
+  vprod + vicms ~ N + Mean + SD + Min + Max,
+  base_nfe
+))
 ```
 
 ---
@@ -642,8 +557,8 @@ datasummary(
 
 ```{r eval=FALSE}
 datasummary(
-  age + income + vat_liability ~ N + Mean + SD + Min + Max, # this is the formula
-  small_business_2019_all                                   # this is the data
+ vprod + vicms ~ N + Mean + SD + Min + Max,  # this is the formula
+  base_nfe                                   # this is the data
 )
 ```
 
@@ -693,7 +608,7 @@ Remember that both `datasummary_skim()` and `datasummary()` have an optional arg
 For example:
 
 ```{r eval=FALSE}
-datasummary_skim(small_business_2019_all,
+datasummary_skim(base_nfe,
                  output = "quick_stats.docx")
 ```
 
@@ -739,7 +654,7 @@ Noticed that we're missing Excel?
 
 ```{r eval=FALSE}
 # Store the table in a new object
-stats_table <- datasummary_skim(small_business_2019_all, output = "huxtable")
+stats_table <- datasummary_skim(base_nfe, output = "huxtable")
 
 # Export this new object to Excel with quick_xlsx()
 quick_xlsx(stats_table, file = "quick_stats.xlsx")
@@ -771,7 +686,7 @@ knitr::include_graphics("img/session3/quick-stats-excel.png")
 
 ```{r eval=FALSE}
 # Store the table in a new object
-stats_table <- datasummary_skim(small_business_2019_all, output = "huxtable")
+stats_table <- datasummary_skim(base_nfe, output = "huxtable")
 
 # Export this new object to Excel with quick_xlsx()
 quick_xlsx(stats_table, file = "quick_stats.xlsx")
@@ -818,7 +733,7 @@ stats_table %>%
 .pull-right[
 .small[
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
-stats_table <- datasummary_skim(small_business_2019_all, output = "huxtable")
+stats_table <- datasummary_skim(base_nfe, output = "huxtable")
 
 # Format table
  stats_table %>%  

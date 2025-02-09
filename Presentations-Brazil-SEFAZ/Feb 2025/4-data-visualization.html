@@ -189,17 +189,17 @@ name: bar-plots
 1. Load `ggplot2`
 
 
-```r
+``` r
 library(ggplot2)
 ```
 
 1. Produce a basic bar plot with the following code:
 
 
-```r
-ggplot(small_business_2019_all) +
-  aes(x = taxperiod,
-      y = vat_liability) +
+``` r
+ggplot(base_nfe) +
+  aes(x = mes_emissao,
+      y = vicms) +
   geom_col() +
   labs(title = "Total VAT liability of small businesses in 2019 by month")
 ```
@@ -221,11 +221,13 @@ This result should be displayed in the lower right panel of your RStudio window
 This plot looks acceptable but it can be improved:
 
 .pull-left[
-- `taxperiod` is a variable representing months but R doesn't know it and it's showing the x-axis with decimals. We need to tell R that those values shouldn't be changed
+- `mes_emissao` is a variable representing months but R doesn't know it and it's showing simply the numbers
 
 - We can center the title
 
-- We should add axis labels (instead of just "vat_liability" and "taxperiod") 
+- We should add axis labels (instead of just "mes_emissao" and "vicms") 
+
+- Too much information on background: grey color, lines
 ]
 
 .pull-right[
@@ -241,18 +243,18 @@ This plot looks acceptable but it can be improved:
 1. Use the following code to improve the aesthetics of your plot
 
 
-```r
-ggplot(small_business_2019_all) +
-  aes(x = taxperiod,
-      y = vat_liability) +
+``` r
+ggplot(base_nfe) +
+  aes(x = as.factor(mes_emissao),    #as.factor() informa que mes_emissao nao é numero mas categorias
+      y = vicms) +
   geom_col() +
   labs(title = "Total VAT liability of small businesses in 2019 by month",
        # x-axis title
-       x = "Month",
+       x = "Mês",
        # y-axis title
-       y = "Georgian Lari") +
+       y = "Valor ICMS (R$") +
   # telling R not to break the x-axis
-  scale_x_continuous(breaks = 201901:201912) +
+  scale_x_discrete(labels = c("Outubro", "Novembro", "Dezembro")) +
   # centering plot title
   theme(plot.title = element_text(hjust = 0.5))
 ```
@@ -276,8 +278,8 @@ Now that your plot looks good, you can save it into an output with `ggsave()`
 1. Use this code to save your plot:
 
 
-```r
-ggsave("vat_liability_small_2019.png",
+``` r
+ggsave("base_nfe_totals.png",
        width = 20,
        height = 10,
        units = "cm")
@@ -316,11 +318,11 @@ ggsave("vat_liability_small_2019.png",
 .pull-left[
 .small[
 
-```r
+``` r
 # Exercise 1:
-ggplot(small_business_2019_all) +
-  aes(x = taxperiod,
-      y = vat_liability) +
+ggplot(base_nfe) +
+  aes(x = mes_emissao,
+      y = vicms) +
   geom_col() +
   labs(title = "Total VAT liability of small businesses in 2019 by month")
 ```
@@ -330,16 +332,18 @@ ggplot(small_business_2019_all) +
 .pull-right[
 .small[
 
-```r
+``` r
 # Exercise 2
-ggplot(small_business_2019_all) +
-  aes(x = as.factor(taxperiod),
-      y = vat_liability) +
+ggplot(base_nfe) +
+  aes(x = as.factor(mes_emissao),   
+      y = vicms) +
   geom_col() +
   labs(title = "Total VAT liability of small businesses in 2019 by month",
-       x = "Month",
-       y = "Georgian Lari") +
-  theme(plot.title = element_text(hjust = 0.5))
+       x = "Mês",
+       y = "Valor ICMS (R$") +
+  scale_x_discrete(labels = c("Outubro", "Novembro", "Dezembro")) +
+  theme(plot.title = element_text(hjust = 0.5)) + 
+  theme_classic()
 ```
 ]
 ]
@@ -391,14 +395,16 @@ name: line-plots
 
 ## Exercise 2a: Collapse your data at the month-group level
 
-Use the following code to create a dataframe collapsed at the month-group level and calculate the total VAT liability for each group in each month
+Use the following code to create a dataframe collapsed at the month-issuer level and calculate the total ICMS liability for each issuer in each month
 
 
-```r
-df_group_month &lt;- small_business_2019_all %&gt;%
-  select(group, taxperiod, vat_liability) %&gt;%
-  group_by(group, taxperiod) %&gt;%
-  summarize(total = sum(vat_liability))
+``` r
+df_group_month &lt;- base_nfe %&gt;%
+  filter(emitcnpj8_anon %in% c(34942603, 23356886,33756669)) %&gt;% 
+  select(emitcnpj8_anon, mes_emissao, vicms) %&gt;%
+  group_by(emitcnpj8_anon, mes_emissao) %&gt;%
+  summarize(total = sum(vicms)) %&gt;% 
+  ungroup()
 ```
 
 ---
@@ -420,16 +426,17 @@ The result will look like this, you can explore it with `View(df_group_month)`.
 ## Exercise 2b: Create a line plot of VAT liability by month and group
 
 
-```r
+``` r
 ggplot(df_group_month) +
-  aes(x = taxperiod,
+  aes(x = mes_emissao,
       y = total) +
-  geom_line(aes(color = group)) +
+  geom_line(aes(color = as.factor(emitcnpj8_anon))) +
   labs(title = "Total VAT liability of small businesses in 2019 by experiment group",
-       x = "Month",
-       y = "Georgian Lari") +
-  scale_x_continuous(breaks = 201901:201912) +
-  theme(plot.title = element_text(hjust = 0.5))
+       x = "Mes",
+       y = "ICMS (R$)") +
+  scale_x_continuous(breaks = c(10,11,12)) +
+  theme(plot.title = element_text(hjust = 0.5)) + 
+  theme_classic()
 ```
 
 ---
@@ -444,7 +451,7 @@ Your result possibly looks like this:
 
 # Line plots // ხაზის ნაკვეთები
 
-Something looks off, doesn't it? We need to **make the legend labels and x-axis texts smaller** for them without overlapping each other and to **remove the centering of the title** so it's not cropped
+We might make it better by doing some adjustments: **make the legend labels, titles and x-axis texts smaller** and to **label the legend title** 
 
 &lt;img src="4-data-visualization_files/figure-html/unnamed-chunk-29-1.png" width="75%" style="display: block; margin: auto;" /&gt;
 
@@ -455,23 +462,29 @@ Something looks off, doesn't it? We need to **make the legend labels and x-axis 
 ## Exercise 2c: Continue improving your plot
 
 1. Add the argument `legend.text=element_text(size=7)` inside `theme()` to decrease the legend text size
+1. Add the argument `legend.title=element_text(size=7)` inside `theme()` to decrease the legend text size
 1. Add the argument `axis.text.x=element_text(size=6)` inside `theme()` to decrease the x-axis text size
   + note that both arguments need to be separated by a comma
-1. Remove `plot.title = element_text(hjust = 0.5)` from `theme()` to remove the centering of the plot title
+1. Add the line `labs(color = "Emissor")` to change the title of the legend
 
 The result should be this:
 
 ```{eval=FALSE}
 ggplot(df_group_month) +
-  aes(x = taxperiod,
+  aes(x = mes_emissao,
       y = total) +
-  geom_line(aes(color = group)) +
+  geom_line(aes(color = as.factor(emitcnpj8_anon))) +
   labs(title = "Total VAT liability of small businesses in 2019 by experiment group",
-       x = "Month",
-       y = "Georgian Lari") +
-  scale_x_continuous(breaks = 201901:201912) +
+       x = "Mes",
+       y = "ICMS (R$)") +
+  scale_x_continuous(breaks = c(10,11,12)) +
+  theme_classic() + 
+  labs(color = "Emissor") +
   theme(legend.text = element_text(size = 7), # don't forget the comma!
-        axis.text.x=element_text(size=6))
+        legend.title = element_text(size = 7), # don't forget the comma!
+        plot.title = element_text(size = 9),
+        axis.text.x=element_text(size=6)) 
+  
 ```
 
 ---
@@ -489,11 +502,11 @@ ggplot(df_group_month) +
 Use this code to save your plot:
 
 
-```r
-ggsave("vat_liability_small_2019_by_group.png",
-       width = 20,
-       height = 10,
-       units = "cm")
+``` r
+  ggsave("base_nfe_icms_emissor.png",
+         width = 20,
+         height = 10,
+         units = "cm")
 ```
 
 ---
@@ -563,11 +576,11 @@ name: text-encodings
 This is similar to what we did for exercise 2a, except that this time the collapsing is at month level instead of the month-group level. Use the code below to store the collapsed dataframe in `month_df`
 
 
-```r
-df_month &lt;- small_business_2019_all %&gt;%
-    select(taxperiod, vat_liability) %&gt;%
-    group_by(taxperiod) %&gt;%
-    summarize(total = sum(vat_liability))
+``` r
+df_month &lt;- base_nfe %&gt;%
+  select(mes_emissao, vicms) %&gt;%
+  group_by(mes_emissao) %&gt;%
+  summarize(total = sum(vicms))
 ```
 
 ---
@@ -587,21 +600,21 @@ This is the result, you can use `View(df_month)` to display it
 Use the collapsed dataframe `df_month` and the former code from exercise 1 to add encodings to your bar plot. The result is the code below:
 
 
-```r
-  ggplot(df_month) +
-    aes(x = taxperiod,
-        y = total) +
-    geom_col() +
-    # Note that the text encodings are added here
-    geom_text(aes(label = total),
-              position = position_dodge(width = 1),
-              vjust = -0.5,
-              size = 3) +
-    labs(title = "Total VAT liability of small businesses in 2019 by month",
-         x = "Month",
-         y = "Georgian Lari") +
-    scale_x_continuous(breaks = 201901:201912) +
-    theme(plot.title = element_text(hjust = 0.5))
+``` r
+ggplot(df_month) +
+  aes(x = mes_emissao,
+      y = total) +
+  geom_col() +
+  geom_text(aes(label = total),
+            position = position_dodge(width = 1),
+            vjust = -0.5,
+            size = 3) +
+  labs(title = "Total VAT liability of small businesses in 2019 by month",
+       x = "Month",
+       y = "Georgian Lari") +
+  scale_x_continuous(breaks = 201901:201912) +
+  theme(plot.title = element_text(hjust = 0.5)) + 
+  theme_classic()
 ```
 
 ---
@@ -621,20 +634,21 @@ This is result is nice but the text encodings have several decimal places. We ca
 Replace `total` with `round(total)` in `geom_text()`. The result should be:
 
 
-```r
-  ggplot(df_month) +
-    aes(x = taxperiod,
-        y = total) +
-    geom_col() +
-    geom_text(aes(label = round(total)), # &lt;--- the change goes here
-              position = position_dodge(width = 1),
-              vjust = -0.5,
-              size = 3) +
-    labs(title = "Total VAT liability of small businesses in 2019 by month",
-         x = "Month",
-         y = "Georgian Lari") +
-    scale_x_continuous(breaks = 201901:201912) +
-    theme(plot.title = element_text(hjust = 0.5))
+``` r
+ggplot(df_month) +
+  aes(x = mes_emissao,
+      y = total) +
+  geom_col() +
+  geom_text(aes(label = round(total)),        #&lt;- Change goes here
+            position = position_dodge(width = 1),
+            vjust = -0.5,
+            size = 3) +
+  labs(title = "Total VAT liability of small businesses in 2019 by month",
+       x = "Month",
+       y = "Georgian Lari") +
+  scale_x_continuous(breaks = 201901:201912) +
+  theme(plot.title = element_text(hjust = 0.5)) + 
+  theme_classic()
 ```
 
 ---
@@ -652,8 +666,8 @@ Replace `total` with `round(total)` in `geom_text()`. The result should be:
 Use this code to save this last plot:
 
 
-```r
-ggsave("vat_liability_small_2019_text.png",
+``` r
+ggsave("nfe_totals_text.png",
        width = 20,
        height = 10,
        units = "cm")
@@ -676,7 +690,7 @@ name: scatter-plots
 
 - Scatter plots are useful when you have two continuous numeric variables and want to show that there might to a correlation between them or visualize outliers (values that stand out from the rest because they are very extreme)
 
-- We use the encoding `geom_line()` for scatterplots
+- We use the encoding `geom_point()` for scatterplots
 
 &lt;img src="4-data-visualization_files/figure-html/unnamed-chunk-45-1.png" width="55%" style="display: block; margin: auto;" /&gt;
 
@@ -689,15 +703,16 @@ name: scatter-plots
 Use the following code to reproduce the scatter plot of the last slide:
 
 
-```r
-ggplot(small_business_2019_all) +
-  aes(x = age,
-      y = vat_liability) +
+``` r
+ggplot(base_nfe) +
+  aes(x = vprod,
+      y = vicms) +
   geom_point() +
   labs(title = "VAT liability versus age for small businesses in 2019",
-       x = "Age of firm (years)",
-       y = "VAT liability") +
-  theme(plot.title = element_text(hjust = 0.5))
+       x = "Valor Produto (R$)",
+       y = "Valor ICMS (R$)") +
+  theme(plot.title = element_text(hjust = 0.5)) + 
+  theme_classic()
 ```
 
 ---
@@ -713,7 +728,7 @@ ggplot(small_business_2019_all) +
 Lastly, remember to save your scatter plot with:
 
 
-```r
+``` r
 ggsave("scatter_age_vat.png",
        width = 20,
        height = 10,
@@ -789,6 +804,7 @@ Click on the floppy disk to save your code in a location that you will remember.
 - [More on data wrangling](https://raw.githack.com/worldbank/dime-r-training/main/Presentations/03-data-wrangling.html#1). More libraries:
   + `tidyr`
   + `janitor`
+  + `data.table`
 
 - [More on data visualization](https://raw.githack.com/worldbank/dime-r-training/main/Presentations/04-data-visualization.html#1)
 

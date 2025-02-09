@@ -155,6 +155,25 @@ knitr::include_graphics("img/session1/data-work-and-cooking.png")
 
 # Programação estatística
 
+## Como pode me beneficiar?
+
+
+.pull-left[
+- **Reproducibilidade**: Códigos registram cada passo e decisão tomada na análise de dados, fazendo com que resultados possam ser compreendidos e verificados
+
+- **Reutilização**: Código pode ser reutilizado para projetos similares, poupando tempo em atividades futuras
+
+- **Transparência em comparação com Excel**: Instruções são documentadas e menos propensas a erros que passos manuais no Excel
+]
+
+.pull-right[
+```{r echo = FALSE, out.width="50%"}
+knitr::include_graphics("img/session1/code-workflow.png")
+```
+]
+
+# Programação estatística
+
 ## Por que usar o R?
 
 .pull-left[
@@ -163,6 +182,8 @@ knitr::include_graphics("img/session1/data-work-and-cooking.png")
   + O R é gratuito
   + O R foi desenvolvido especificamente para programação estatística
   + Existe uma grande comunidade mundial de usuários de R. Isso significa que você pode facilmente buscar ajuda ou exemplos de código na internet
+  + Ótimas recomendações do *ChatGPT* & outros LLM
+  + Versatilidade: esses slides foram produzidos em R(Markdown)!
 ]
 
 .pull-right[
@@ -576,7 +597,9 @@ knitr::include_graphics("img/session1/environment3-br.png")
 
 - Lembre-se sempre de que dataframes são apenas objetos no R. O R diferencia a qual dataframe o código se refere pelo nome do dataframe.
 
-
+```{r echo = FALSE, out.width="60%"}
+knitr::include_graphics("img/session1/excel-tabs2.png")
+```
 
 ---
 
@@ -623,7 +646,7 @@ Até agora, trabalhamos com duas classes de objetos:
 
 - **Dataframe:** uma coleção de valores organizados em linhas e colunas. `base_nfe` and `base_outubro` são dataframes. Eles são semelhantes a uma planilha do Excel.
 
-No próximo exercício, aprenderemos sobre outro tipo de objeto. (para consulta própria)
+No próximo exercício, aprenderemos sobre outro tipo de objeto. **(para consulta própria)**
 
 ---
 
@@ -695,7 +718,7 @@ knitr::include_graphics("img/session1/ex5-2-br.png")
 
 Observe duas coisas:
 
-1.- Operar com dois vetores aplica a operação **elemento por elemento** <span style="color:red"> (CHECK TRANSLATION FROM element-wise**)</span> 
+1.- Operar com dois vetores aplica a operação **elemento por elemento** 
 
 ```{r echo = FALSE, out.width="75%"}
 knitr::include_graphics("img/session1/element-wise-vector.png")
@@ -865,6 +888,10 @@ knitr::include_graphics("img/session1/session2.png")
 
 class: inverse, center, middle
 
-# Obrigado! // Thanks! // ¡Gracias! 
+# Obrigado! // Thanks!
+
+```{r echo = FALSE, out.width="80%"}
+knitr::include_graphics("img/session1/we-believe.png")
+```
 
 <html><div style='float:left'></div><hr color='#D38C28' size=1px width=1100px></html>

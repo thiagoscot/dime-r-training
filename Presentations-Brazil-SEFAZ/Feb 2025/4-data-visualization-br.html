@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Sessão 4 - Visualização de dados</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Thiago Scot" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/panelset/panelset.css" rel="stylesheet" />
+    <script src="libs/panelset/panelset.js"></script>
+    <script src="libs/xaringanExtra-webcam/webcam.js"></script>
+    <script id="xaringanExtra-webcam-options" type="application/json">{"width":"200","height":"200","margin":"1em"}</script>
+    <script src="libs/clipboard/clipboard.min.js"></script>
+    <link href="libs/xaringanExtra-clipboard/xaringanExtra-clipboard.css" rel="stylesheet" />
+    <script src="libs/xaringanExtra-clipboard/xaringanExtra-clipboard.js"></script>
+    <script>window.xaringanExtraClipboard(null, {"button":"Copy Code","success":"Copied!","error":"Press Ctrl+C to Copy"})</script>
+    <script>window.xaringanExtraClipboard(null, {"button":"Copy Code","success":"<i class=\"fa fa-check\" style=\"color: #90BE6D\"><\/i>","error":"<i class=\"fa fa-times-circle\" style=\"color: #F94144\"><\/i>"})</script>
+    <link href="libs/font-awesome/css/all.min.css" rel="stylesheet" />
+    <link href="libs/font-awesome/css/v4-shims.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="libs/remark-css/default.css" type="text/css" />
+    <link rel="stylesheet" href="libs/remark-css/metropolis.css" type="text/css" />
+    <link rel="stylesheet" href="libs/remark-css/metropolis-fonts.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# Sessão 4 - Visualização de dados
+]
+.subtitle[
+## Treinamento em R - SEFAZ RS-WB DIME
+]
+.author[
+### Thiago Scot
+]
+.date[
+### The World Bank | Fevereiro 2025
+]
+
+---
+
+
+
+
+&lt;style type="text/css"&gt;
+@media print {
+  .has-continuation {
+    display: block !important;
+  }
+}
+&lt;/style&gt;
+
+# Índice
+
+- [Introdução](#intro)
+- [A gramática dos gráficos](#grammar-of-graphics)
+- [Gráficos de barras](#bar-plots)
+- [Gráficos de linha](#line-plots)
+- [Codificações de texto](#text-encodings)
+- [Gráficos de dispersão](#scatter-plots)
+- [Conclusão](#wrapping-up)
+
+---
+
+class: inverse, center, middle
+name: intro
+
+# Introdução
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#D38C28' size=1px width=1100px&gt;&lt;/html&gt;
+
+---
+
+# Introdução
+
+## Sobre esta sessão
+
+&lt;img src="img/session4/data-work-data-vis.png" width="80%" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Introdução
+
+## Visualização de dados no pipeline de trabalho com dados
+
+- Comparada a outros tipos de saídas, a visualização de dados envolve uma etapa extra após a manipulação de dados: produzir a visualização em si
+
+- Também usamos código R para produzir visualizações de dados
+
+- A entrada para esse código é um dataframe manipulado, um dataframe que está pronto para ser usado
+
+&lt;img src="img/session4/data-vis.png" width="80%" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Introdução
+
+## Visualização de dados em R
+
+.pull-left[
+- Usaremos o pacote `ggplot2` para criar visualizações de dados
+
+- O `ggplot2` facilita muito a produção de gráficos em R
+
+  + Ele segue uma sintaxe baseada em uma descrição do gráfico que você quer obter
+  
+  + Esta sintaxe é chamada de **gramática dos gráficos**, um método de referência de definição de visualização de dados em programação estatística
+]
+
+.pull-right[
+&lt;img src="img/session4/ggplot2.png" width="70%" style="display: block; margin: auto;" /&gt;
+]
+
+---
+
+class: inverse, center, middle
+name: grammar-of-graphics
+
+# A gramática dos gráficos
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#D38C28' size=1px width=1100px&gt;&lt;/html&gt;
+
+---
+
+# A gramática dos gráficos
+
+## A gramática dos gráficos no `ggplot2`
+
+&lt;img src="img/session4/grammar-of-graphics-br.png" width="100%" style="display: block; margin: auto;" /&gt;
+
+---
+
+# A gramática dos gráficos
+
+## A gramática dos gráficos no `ggplot2`
+
+&lt;img src="img/session4/grammar-of-graphics2-br.png" width="100%" style="display: block; margin: auto;" /&gt;
+
+---
+
+# A gramática dos gráficos
+
+## A gramática dos gráficos no `ggplot2`
+
+&lt;img src="img/session4/grammar-of-graphics3-br.png" width="100%" style="display: block; margin: auto;" /&gt;
+
+---
+
+# A gramática dos gráficos
+
+## A gramática dos gráficos no `ggplot2`
+
+&lt;img src="img/session4/grammar-of-graphics4gc-br.png" width="100%" style="display: block; margin: auto;" /&gt;
+
+---
+
+# A gramática dos gráficos
+
+## A gramática dos gráficos no `ggplot2`
+
+&lt;img src="img/session4/grammar-of-graphics4l-br.png" width="100%" style="display: block; margin: auto;" /&gt;
+
+---
+
+class: inverse, center, middle
+name: bar-plots
+
+# Gráficos de barras
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#D38C28' size=1px width=1100px&gt;&lt;/html&gt;
+
+---
+
+# Gráficos de barras
+
+## Exercício 1a: Criar um gráfico de barras básico
+
+1. Abra um novo script para esta sessão clicando em `File` &gt;&gt; `New File` &gt;&gt; `R Script`
+
+1. Carregue o `ggplot2`
+
+
+``` r
+library(ggplot2)
+```
+
+1. Produza um gráfico de barras básico com o seguinte código:
+
+
+``` r
+ggplot(base_nfe) +
+  aes(x = mes_emissao,
+      y = vicms) +
+  geom_col() +
+  labs(title = "Total de ICMS por mês")
+```
+
+---
+
+# Gráficos de barras
+
+
+
+Este resultado deve ser exibido no painel inferior direito da sua janela do RStudio
+
+&lt;img src="4-data-visualization-br_files/figure-html/unnamed-chunk-13-1.png" width="70%" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Gráficos de barras
+
+Este gráfico parece aceitável, mas pode ser melhorado:
+
+.pull-left[
+- `mes_emissao` é uma variável que representa meses, mas o R não sabe disso e está mostrando simplesmente os números
+
+- Podemos centralizar o título
+
+- Devemos adicionar rótulos dos eixos (em vez de apenas "mes_emissao" e "vicms")
+
+- Muita informação no fundo: cor cinza, linhas
+]
+
+.pull-right[
+&lt;img src="4-data-visualization-br_files/figure-html/unnamed-chunk-14-1.png" width="100%" style="display: block; margin: auto;" /&gt;
+]
+
+---
+
+# Gráficos de barras
+
+## Exercício 1b: Melhore seu gráfico de barras
+
+1. Use o seguinte código para melhorar a estética do seu gráfico
+
+
+``` r
+ggplot(base_nfe) +
+  aes(x = as.factor(mes_emissao),    #as.factor() informa que mes_emissao não é número mas categorias
+      y = vicms) +
+  geom_col() +
+  labs(title = "Total de ICMS por mês",
+       # título do eixo x
+       x = "Mês",
+       # título do eixo y
+       y = "Valor ICMS (R$)") +
+  # dizendo ao R para não quebrar o eixo x
+  scale_x_discrete(labels = c("Outubro", "Novembro", "Dezembro")) +
+  # remove linhas de fundo e cor
+  theme_classic() + 
+  # centralizando o título do gráfico
+  theme(plot.title = element_text(hjust = 0.5))
+```
+
+---
+
+# Gráficos de barras
+
+Agora está melhor:
+
+&lt;img src="4-data-visualization-br_files/figure-html/unnamed-chunk-16-1.png" width="70%" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Gráficos de barras
+
+## Exercício 1c: salve seu gráfico
+
+Agora que seu gráfico está bom, você pode salvá-lo em uma saída com `ggsave()`
+
+1. Use este código para salvar seu gráfico:
+
+
+``` r
+ggsave("base_nfe_totals.png",
+       width = 20,
+       height = 10,
+       units = "cm")
+```
+
+---
+
+# Gráficos de barras
+
+.pull-left[
+- `ggsave()` por padrão salva o último gráfico que você produziu
+
+- O primeiro argumento em `ggsave()` é o nome do arquivo em que salvamos o gráfico. Também podemos usar caminhos de arquivo aqui
+
+- O resto são argumentos opcionais que definem as dimensões da imagem que você exporta, é melhor defini-los para que a imagem tenha as proporções e tamanho de texto corretos
+]
+
+.pull-right[
+&lt;img src="img/session4/ggsave-ex1.png" width="95%" style="display: block; margin: auto;" /&gt;
+]
+
+---
+
+# Gráficos de barras
+
+## Uma nota sobre sintaxe
+
+- A visualização de dados geralmente requer várias iterações para adicionar novos elementos ao seu código inicial e melhorar seu gráfico
+
+- `ggplot2` adiciona novos elementos a uma visualização com o símbolo `+`
+
+- Mais personalização significa que seu código pode facilmente se tornar bastante longo. Usar espaços e quebras de linha ajuda na clareza, mas **simplesmente não há como evitar isso**
+
+.pull-left[
+.small[
+
+``` r
+# Exercício 1:
+ggplot(base_nfe) +
+  aes(x = mes_emissao,
+      y = vicms) +
+  geom_col() +
+  labs(title = "Total de ICMS de pequenas empresas em 2019 por mês")
+```
+]
+]
+
+.pull-right[
+.small[
+
+``` r
+# Exercício 2
+ggplot(base_nfe) +
+  aes(x = as.factor(mes_emissao),   
+      y = vicms) +
+  geom_col() +
+  labs(title = "Total de ICMS por mês",
+       x = "Mês",
+       y = "Valor ICMS (R$)") +
+  scale_x_discrete(labels = c("Outubro", "Novembro", "Dezembro")) +
+  theme(plot.title = element_text(hjust = 0.5)) + 
+  theme_classic()
+```
+]
+]
+
+---
+
+class: inverse, center, middle
+name: line-plots
+
+# Gráficos de linha
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#D38C28' size=1px width=1100px&gt;&lt;/html&gt;
+
+---
+
+# Gráficos de linha
+
+- Em visualização de dados, chamamos de **codificações** a geometria selecionada para representar os dados visualmente
+
+- Nos exemplos anteriores, fizemos isso quando usamos `geom_col()`. Isso diz ao R que nossa codificação para representar os dados são **barras** (também chamadas de colunas)
+
+- `ggplot2` tem várias opções diferentes para codificações em visualização de dados, por exemplo: **linhas**
+
+- A codificação para linhas no `ggplot2` é `geom_line()`
+
+
+
+&lt;img src="4-data-visualization-br_files/figure-html/unnamed-chunk-22-1.png" width="55%" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Gráficos de linha
+
+- No entanto, eles geralmente também requerem alguma manipulação adicional de dados em comparação com gráficos de barras: os dados devem ser agrupados no nível especificado no eixo x e variável de agrupamento
+
+- Isso ficará mais claro no próximo exercício. O gráfico que produziremos está abaixo
+
+&lt;img src="4-data-visualization-br_files/figure-html/unnamed-chunk-23-1.png" width="65%" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Gráficos de linha
+
+## Exercício 2a: Agrupe seus dados no nível mês-grupo
+
+Use o seguinte código para criar um dataframe agrupado no nível mês-emissor e calcular o ICMS total para cada emissor em cada mês
+
+
+``` r
+df_group_month &lt;- base_nfe %&gt;%
+  filter(emitcnpj8_anon %in% c(34942603, 23356886,33756669)) %&gt;% 
+  select(emitcnpj8_anon, mes_emissao, vicms) %&gt;%
+  group_by(emitcnpj8_anon, mes_emissao) %&gt;%
+  summarize(total = sum(vicms)) %&gt;% 
+  ungroup()
+```
+
+---
+
+# Gráficos de linha
+
+.pull-left[
+O resultado se parecerá com isso, você pode explorá-lo com `View(df_group_month)`.
+]
+
+.pull-right[
+&lt;img src="img/session4/df-group-month-2.png" width="85%" style="display: block; margin: auto;" /&gt;
+]
+
+---
+
+# Gráficos de linha
+
+## Exercício 2b: Criar um gráfico de linha do ICMS por mês e grupo
+
+
+``` r
+ggplot(df_group_month) +
+  aes(x = mes_emissao,
+      y = total) +
+  geom_line(aes(color = as.factor(emitcnpj8_anon))) +
+  labs(title = "Total de ICMS por empresa-mes",
+       x = "Mês",
+       y = "ICMS (R$)") +
+  scale_x_continuous(breaks = c(10,11,12)) +
+  theme(plot.title = element_text(hjust = 0.5)) + 
+  theme_classic()
+```
+
+---
+
+# Gráficos de linha
+
+Seu resultado possivelmente se parece com isso:
+
+&lt;img src="4-data-visualization-br_files/figure-html/unnamed-chunk-27-1.png" width="75%" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Gráficos de linha
+
+Podemos melhorá-lo fazendo alguns ajustes: **tornar os rótulos da legenda, títulos e textos do eixo x menores** e **rotular o título da legenda**
+
+&lt;img src="4-data-visualization-br_files/figure-html/unnamed-chunk-28-1.png" width="75%" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Gráficos de linha
+
+## Exercício 2c: Continue melhorando seu gráfico
+
+&lt;small&gt;
+1. Adicione o argumento `legend.text=element_text(size=7)` dentro de `theme()` para diminuir o tamanho do texto da legenda
+1. Adicione o argumento `legend.title=element_text(size=7)` dentro de `theme()` para diminuir o tamanho do texto do título da legenda
+1. Adicione o argumento `axis.text.x=element_text(size=6)` dentro de `theme()` para diminuir o tamanho do texto do eixo x
+  + note que ambos os argumentos precisam ser separados por vírgula
+1. Adicione a linha `labs(color = "Emissor")` para mudar o título da legenda
+
+O resultado deve ser este:
+
+&lt;/small&gt;
+
+.small[
+```{eval=FALSE}
+ggplot(df_group_month) +
+  aes(x = mes_emissao,y = total) +
+  geom_line(aes(color = as.factor(emitcnpj8_anon))) +
+  labs(title = "Total de ICMS por grupo de empresas em 2019",x = "Mês",y = "ICMS (R$)") +
+  scale_x_continuous(breaks = c(10,11,12)) +
+  theme_classic() + 
+  labs(color = "Emissor") +
+  theme(legend.text = element_text(size = 7), # não esqueça a vírgula!
+        legend.title = element_text(size = 7), # não esqueça a vírgula!
+        plot.title = element_text(size = 9),
+        axis.text.x=element_text(size=6)) 
+```
+]
+
+
+---
+
+# Gráficos de linha
+
+Seu gráfico deve ser algo assim:
+
+&lt;img src="4-data-visualization-br_files/figure-html/unnamed-chunk-29-1.png" width="75%" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Gráficos de linha
+
+## Exercício 2d: salve seu gráfico
+
+Use este código para salvar seu gráfico:
+
+
+``` r
+ggsave("base_nfe_icms_emissor.png",
+       width = 20,
+       height = 10,
+       units = "cm")
+```
+
+---
+
+# Gráficos de linha
+
+&lt;img src="img/session4/ggsave-ex2.png" width="50%" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Gráficos de linha
+
+Escolher a codificação correta para seus dados pode ser complicado. Depende do que você quer mostrar em seu gráfico e quanta informação você quer que ele mostre
+
+  + **Gráficos de barras** mostram menos informações que gráficos de linha em geral, mas são bons para casos em que você tem apenas uma variável numérica e uma variável categórica para mostrar
+  + **Gráficos de linha** podem mostrar mais informações e incluir múltiplos grupos para adicionar uma dimensão adicional aos seus dados, mas não são visualmente atraentes quando seus dados variam muito de uma categoria para outra
+
+.pull-left[
+&lt;img src="4-data-visualization-br_files/figure-html/unnamed-chunk-32-1.png" width="100%" style="display: block; margin: auto;" /&gt;
+]
+
+.pull-right[
+&lt;img src="4-data-visualization-br_files/figure-html/unnamed-chunk-33-1.png" width="100%" style="display: block; margin: auto;" /&gt;
+]
+
+---
+
+class: inverse, center, middle
+name: text-encodings
+
+# Codificações de texto
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#D38C28' size=1px width=1100px&gt;&lt;/html&gt;
+
+---
+
+# Codificações de texto
+
+- Formas geométricas como barras e linhas não são a única maneira de codificar dados em gráficos
+
+- Também podemos usar texto diretamente para representar informações no gráfico, como no exemplo abaixo. Isso é chamado de **codificações de texto**
+
+- Codificações de texto podem ser combinadas com codificações geométricas para destacar informações ou fornecer detalhes importantes adicionais à sua visualização
+
+
+
+&lt;img src="4-data-visualization-br_files/figure-html/unnamed-chunk-35-1.png" width="57%" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Codificações de texto
+
+- Usar codificações de texto em gráfico de barras pode ser esclarecedor
+
+- No entanto, também requer manipulação adicional de dados: os dados precisam ser agrupados no mesmo nível do eixo x para poder adicionar codificações
+
+- Veremos isso no próximo exercício
+
+&lt;img src="4-data-visualization-br_files/figure-html/unnamed-chunk-36-1.png" width="57%" style="display: block; margin: auto;" /&gt;
+
+---
+# Codificações de texto
+## Exercício 3a: Agrupe seus dados no nível mensal
+
+Isso é similar ao que fizemos no exercício 2a, exceto que desta vez o agrupamento é no nível mensal em vez do nível mês-grupo. Use o código abaixo para armazenar o dataframe agrupado em `df_mes`
+
+
+``` r
+df_mes &lt;- base_nfe %&gt;%
+  select(mes_emissao, vicms) %&gt;%
+  group_by(mes_emissao) %&gt;%
+  summarize(total = sum(vicms))
+```
+
+---
+# Codificações de texto
+
+Esse deve ser o resultado que você pode ver usando `View(df_mes)`
+
+&lt;img src="img/session4/view-df-mes.png" width="50%" style="display: block; margin: auto;" /&gt;
+
+
+---
+# Codificações de texto
+
+## Exercício 3b: Adicione codificações ao seu gráfico de barras
+
+Use o dataframe agrupado `df_mes` e o código anterior do exercício 1 para adicionar codificações ao seu gráfico de barras. O resultado é o código abaixo:
+
+
+``` r
+ggplot(df_mes) +
+  aes(x = mes_emissao,
+      y = total) +
+  geom_col() +
+  geom_text(aes(label = total),
+            position = position_dodge(width = 1),
+            vjust = -0.5,
+            size = 3) +
+  labs(title = "Total de ICMS por mês",
+       x = "Mês",
+       y = "ICMS (R$)") +
+  theme_classic() + 
+  theme(plot.title = element_text(hjust = 0.5)) 
+```
+
+---
+
+# Codificações de texto
+
+Este resultado é bom, mas as codificações de texto têm várias casas decimais. Podemos melhorá-lo arredondando `total` com a função `round()`
+
+&lt;img src="4-data-visualization-br_files/figure-html/unnamed-chunk-40-1.png" width="75%" style="display: block; margin: auto;" /&gt;
+
+---
+# Codificações de texto
+## Exercício 3c: Melhore seu gráfico mais uma vez
+
+Substitua `total` por `round(total)` em `geom_text()`. O resultado deve ser:
+
+
+``` r
+ggplot(df_mes) +
+  aes(x = mes_emissao,
+      y = total) +
+  geom_col() +
+  geom_text(aes(label = round(total)),        #&lt;- Mudança vai aqui
+            position = position_dodge(width = 1),
+            vjust = -0.5,
+            size = 3) +
+  labs(title = "Total de ICMS por mês",
+       x = "Mês",
+       y = "ICMS (R$)") +
+  scale_x_continuous(breaks = 201901:201912) +
+  theme(plot.title = element_text(hjust = 0.5)) + 
+  theme_classic()
+```
+
+---
+# Codificações de texto
+
+&lt;img src="4-data-visualization-br_files/figure-html/unnamed-chunk-42-1.png" width="75%" style="display: block; margin: auto;" /&gt;
+---
+# Codificações de texto
+
+## Não se esqueça de salvar seu gráfico!
+
+Use este código para salvar este último gráfico:
+
+
+``` r
+ggsave("nfe_totals_text.png",
+       width = 20,
+       height = 10,
+       units = "cm")
+```
+
+---
+
+class: inverse, center, middle
+name: scatter-plots
+
+# Gráficos de dispersão
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#D38C28' size=1px width=1100px&gt;&lt;/html&gt;
+
+---
+
+# Gráficos de dispersão
+
+- Vamos explorar mais um tipo de codificação para visualizações de dados: **gráficos de dispersão** (*scatter plot*)
+
+- Gráficos de dispersão são úteis quando você tem duas variáveis numéricas contínuas e quer mostrar que pode haver uma correlação entre elas ou visualizar outliers (valores que se destacam do resto porque são muito extremos)
+
+- Usamos a codificação `geom_point()` para gráficos de dispersão
+
+&lt;img src="4-data-visualization-br_files/figure-html/unnamed-chunk-44-1.png" width="55%" style="display: block; margin: auto;" /&gt;
+---
+# Gráficos de dispersão
+## Exercício 4: Criar um gráfico de dispersão
+
+Use o seguinte código para reproduzir o gráfico de dispersão do último slide:
+
+
+``` r
+ggplot(base_nfe) +
+  aes(x = vprod,
+      y = vicms) +
+  geom_point() +
+  labs(title = "ICMS vs. valor produto",
+       x = "Valor Produto (R$)",
+       y = "Valor ICMS (R$)") +
+  theme(plot.title = element_text(hjust = 0.5)) + 
+  theme_classic()
+```
+
+---
+# Gráficos de dispersão
+
+&lt;img src="4-data-visualization-br_files/figure-html/unnamed-chunk-46-1.png" width="85%" style="display: block; margin: auto;" /&gt;
+
+---
+# Gráficos de dispersão
+
+Por último, lembre-se de salvar seu gráfico de dispersão com:
+
+
+``` r
+ggsave("scatter_vprod_icms.png",
+       width = 20,
+       height = 10,
+       units = "cm")
+```
+
+---
+
+class: inverse, center, middle
+name: wrapping-up
+
+# Conclusão
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#D38C28' size=1px width=1100px&gt;&lt;/html&gt;
+
+---
+
+# Conclusão
+
+## Outras codificações no `ggplot2`
+
+Esta tabela lista várias das codificações mais populares no `ggplot2`
+
+| Codificação | Função no `ggplot2` |
+| -------- | --------------------- |
+| Barras | `geom_col()` |
+| Linhas | `geom_line()` |
+| Pontos (gráfico de dispersão) | `geom_point()` |
+| Área | `geom_area()` |
+| Histograma | `geom_histogram()` |
+| Etiquetas flutuantes (textos) | `geom_text()` |
+| Box plot | `geom_boxplot()` |
+| Gráfico de pizza | `geom_bar() + coord_polar()` |
+| Linha suavizada | `geom_smooth()` |
+
+---
+
+# Conclusão
+
+## Salve seu código!
+
+Clique no disquete para salvar seu código em um local que você lembrará.
+
+&lt;img src="img/session4/save.png" width="55%" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Conclusão
+
+## Pipeline de trabalho com dados
+
+&lt;img src="img/session4/data-work-final.png" width="95%" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Conclusão
+
+## Olhando adiante
+
+&lt;img src="img/session4/data-work-expanded.png" width="95%" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Conclusão
+
+## Olhando adiante
+
+- [Conectando R com bancos de dados SQL](https://solutions.posit.co/connections/db/getting-started/connect-to-database/). Algumas bibliotecas:
+  + `dbConnect`
+  + `dbplyr`
+  + `DBI`
+
+- [Mais sobre manipulação de dados](https://raw.githack.com/worldbank/dime-r-training/main/Presentations/03-data-wrangling.html#1). Mais bibliotecas:
+  + `tidyr`
+  + `janitor`
+  + `data.table`
+
+- [Mais sobre visualização de dados](https://raw.githack.com/worldbank/dime-r-training/main/Presentations/04-data-visualization.html#1)
+
+---
+
+class: inverse, center, middle
+
+# Obrigado!
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#D38C28' size=1px width=1100px&gt;&lt;/html&gt;
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:9",
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

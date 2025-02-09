@@ -1,17 +1,27 @@
-# Data
-small_business_2019     <- read.csv("data/small_business_2019.csv")
-small_business_2019_age <- read.csv("data/small_business_2019_age.csv")
-
-# Exercise 3
+# Exercicio 3
 library(dplyr)
+library(data.table)
 
-# Exercise 5
-temp1 <- filter(small_business_2019, region == "Tbilisi")
-temp2 <- arrange(temp1, -income)
-df_tbilisi_50 <- filter(temp2, row_number() <= 50)
 
-# Exercise 6
-temp1 <- select(small_business_2019, modified_id, income)
-temp2 <- inner_join(temp1, small_business_2019_age, by = "modified_id")
-temp3 <- filter(temp2, age > 5)
-total_income <- colSums(select(temp3, income))
+# Data
+base_nfe <- read.csv('/Users/tscot/Downloads/Treinamento_SEFAZ/base_nfe.csv')
+base_emissor <- read.csv('/Users/tscot/Downloads/Treinamento_SEFAZ/base_emissor.csv')
+
+
+# Exercicio 5
+temp1 <- filter(base_nfe, mes_emissao == 10)
+temp2 <- arrange(temp1, -vprod)
+result_scenario1 <- filter(temp2, row_number() <= 50)
+
+# Exercicio 6
+temp1 <- select(base_nfe, nfuid_anon, emitcnpj8_anon, vicms)
+temp2 <- left_join(temp1, base_emissor, by = "emitcnpj8_anon")
+temp3 <- filter(temp2, emituf != "RS")
+total_income <- summarise(temp3, sum(vicms))
+
+# Exercicio 7
+temp1 <- select(base_nfe, xprod, vprod)
+temp2 <- group_by(temp1, xprod)
+product_df <- summarize(temp2,
+                        total = sum(vprod),
+                        average = mean(vprod))
